@@ -5,13 +5,19 @@ html { scroll-behavior:auto; scrollbar-gutter:stable; background:#000; }
 .rivanta-header-logo { width:clamp(180px,17vw,246px); }
 .citadel-site-header-brand { flex-shrink:0; }
 .rivanta-brand-logo [data-logo-typography] [fill="#FFFFFF"] { fill:var(--rivanta-logo-ink, #fff); }
+.citadel-site-header[data-logo-tone="dark"] .rivanta-header-logo [fill]:not([fill="none"]) { fill:#111111; }
+.citadel-site-header[data-logo-tone="dark"] .rivanta-header-logo [stroke]:not([stroke="none"]) { stroke:#111111; }
 @media (max-width:767px) {
   .rivanta-header-logo { width:min(48vw,190px); }
 }
 .rivanta-footer-brand .citadel-container { width:100%; max-width:100%; margin-inline:0; }
 /* Crop the transparent padding without stretching the supplied artwork.
    The 1916x821 image contains a visible 1849x521 wordmark. */
-.rivanta-footer-headline { aspect-ratio:1849 / 521; margin-bottom:clamp(2rem,4vw,4rem); }
+.rivanta-footer-headline { aspect-ratio:1849 / 521; margin-bottom:0; }
+.rivanta-footer-brand .rivanta-footer-content {
+  padding-top:clamp(3rem,6vw,6rem);
+  padding-bottom:clamp(2rem,4vw,4rem);
+}
 .rivanta-footer-headline::after {
   content:"";
   position:absolute;

@@ -199,7 +199,8 @@ export function initScrollspyNav() {
     const sectionId = currentProbeSectionId || refreshProbeSectionId();
     const surface = resolveSectionSurface(sectionId);
     header.dataset.logoCoverSurface = (isOverHero || surface === 'orange') ? 'hidden' : surface;
-    const heroIsOrange = isOverHero && Number(hero?.dataset.progress || 0) >= 0.55;
+    const heroIsOrange = isOverHero && Number(hero?.dataset.progress || 0) >= 0.28;
+    header.dataset.logoTone = heroIsOrange || surface === 'orange' ? 'dark' : 'brand';
     const footerHeadline = sectionId === 'footer-brand' ? footerBrandSection?.querySelector('.rivanta-footer-headline') : null;
     const overFooterFade = footerHeadline
       && (header.offsetHeight - footerHeadline.getBoundingClientRect().top) < footerHeadline.offsetHeight * 0.12;

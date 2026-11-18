@@ -25,12 +25,16 @@ export function initHeroCanvasSequence() {
   };
   const play=video=>{if(video?.paused && !document.hidden) video.play()?.catch(()=>{});};
   const updateMedia=()=>{
-    const mode=document.hidden || !inView || motion.matches ? 'paused' : progress<0.76 ? 'opening' : 'closing';
+    const active=!document.hidden && inView && !motion.matches;
+    // Keep both videos running through their crossfade. On reverse scroll the
+    // opening video is already playing before it becomes visible again.
+    const openingNeeded=active && progress<0.96;
+    const closingNeeded=active && progress>0.70;
+    const mode=`${Number(openingNeeded)}:${Number(closingNeeded)}`;
     if(mode===mediaMode) return;
     mediaMode=mode;
-    if(mode==='opening') {play(openingVideo);closingVideo?.pause();}
-    else if(mode==='closing') {openingVideo?.pause();play(closingVideo);}
-    else {openingVideo?.pause();closingVideo?.pause();}
+    if(openingNeeded) play(openingVideo);else openingVideo?.pause();
+    if(closingNeeded) play(closingVideo);else closingVideo?.pause();
   };
   if(closingVideo) {
     closingVideo.loop=true;
@@ -39,17 +43,21 @@ export function initHeroCanvasSequence() {
 
   const draw=()=>{
     const takeover=smoothstep(0.08,0.80,progress);
+    // The detailed hawk has internal cutouts even when enlarged past the
+    // viewport. Fade the complete orange layer into the video rather than
+    // switching that layer off at a finite mask size.
+    const entrance=smoothstep(0.08,0.32,progress);
     const heading=smoothstep(0.60,0.77,progress);
     const metrics=smoothstep(0.74,0.96,progress);
     const hasClosingFrame=closingVideo && closingVideo.readyState>=2;
     const closing=hasClosingFrame ? smoothstep(0.80,0.93,progress) : 0;
     setProperty('--hero-progress',progress);
-    setProperty('--hero-opening-visibility',1-smoothstep(0.28,0.50,progress));
+    setProperty('--hero-opening-visibility',1-smoothstep(0.035,0.15,progress));
     setProperty('--hero-final-progress',heading);
     setProperty('--hero-final-shift-progress',metrics);
     setProperty('--hero-metrics-visibility',metrics);
     setProperty('--hero-secondary-visibility',hasClosingFrame ? smoothstep(0.74,0.80,progress) : 0);
-    setProperty('--hero-overlay-visibility',1-closing);
+    setProperty('--hero-overlay-visibility',entrance*(1-closing));
     hero.dataset.progress=progress.toFixed(3);
     hero.dataset.sequenceComplete=target>=0.999 ? '1' : '0';
     hero.dataset.sequenceActive=target>0 && target<1 ? '1' : '0';
@@ -115,7 +123,13 @@ export function initHeroCanvasSequence() {
   hero.queueAnchorNavigation=()=>false;
   hero.clearQueuedAnchorNavigation=()=>true;
   addEventListener('scroll',schedule,{passive:true});
-  addEventListener('citadel:scroll',schedule);
+  addEventListener('citadel:scroll',()=>{
+    if(document.hidden) return;
+    // ScrollSmoother has already rendered this frame. Draw in that same tick;
+    // queuing another RAF makes a fast reversal visibly trail by a frame.
+    if(raf) cancelAnimationFrame(raf);
+    frame(performance.now());
+  });
   let measureRaf=0;
   const queueMeasure=()=>{if(!measureRaf) measureRaf=requestAnimationFrame(()=>{measureRaf=0;measure();});};
   addEventListener('resize',queueMeasure,{passive:true});
