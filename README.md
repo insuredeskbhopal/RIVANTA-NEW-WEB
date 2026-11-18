@@ -1,31 +1,55 @@
-# Citadel website recreation
+# Citadel — Next.js
 
-A portable static recreation of https://citadelgroup.org/#map, retaining the reference's typography, imagery, video hero, scroll animation, galleries, case study dialogs, partner map, leadership section, and partner directory.
+The complete existing website migrated to **Next.js 16.4.6 App Router and React 19.3.1**. The original section markup, styles, fonts, images, videos, map, carousels, dialogs, and scroll controllers are preserved.
 
-## Run locally
+## Run
 
-Requires Node.js. No dependency installation or compilation is needed.
+Requires Node.js 20.9 or newer. Node.js 24 was used for verification.
 
 ```sh
+npm ci
 npm run dev
 ```
 
-Open http://localhost:4173 or http://localhost:4173/#map.
+Open http://localhost:3000.
 
-The complete website is in `dist/`. It can also be served by any standard static web server. `scripts/serve.mjs` supports video range requests.
+## Production
 
-## Source and provenance
+```sh
+npm run build
+npm run check
+npm start
+```
 
-The recreation uses public frontend HTML, CSS, JavaScript, and media from the user-selected reference. These retain the original Citadel branding and content. WordPress metadata, analytics, challenge scripts, and the original agency footer link were removed. Internal asset references are served locally; partner and project links retain their original external destinations.
+The build creates a complete static export in `out/`. `npm start` serves that export on port 3000. `npm run preview` uses port 4174. The site also runs on Vercel or any host that supports Next.js static exports.
 
-`scripts/mirror.py` documents the asset localization process. `evidence/asset-manifest.json` records reference asset URLs and hashes; `evidence/inspection.md` records the REA observations and validation results.
+## Project structure
 
-This is a static frontend recreation. WordPress editing and backend services are outside its scope.
+| Location | Purpose |
+| --- | --- |
+| `app/layout.jsx` | Original document language, body classes, head resources, and client runtime entry |
+| `app/page.jsx` | Home page assembled from React section components |
+| `components/site/Sections.jsx` | Header, hero, About, network, case studies, partner map, principals, directory, and footer components |
+| `components/site/SiteRuntime.jsx` | Starts the existing interactive controllers after React hydration |
+| `lib/site-markup.js` | Converts the preserved source fragments to server-rendered React elements without adding layout wrappers |
+| `content/*.html` | Original editable HTML fragments, including SVGs and inline map data |
+| `public/wp-content/` | All original assets at their existing URLs |
+| `content/assets-manifest.json` | SHA-256 checks for the 138 preserved assets |
+| `next.config.mjs` | Static-export configuration |
 
-## Animation and scrolling
+Edit section content in the matching `content/` fragment. Styles and interactive controllers are under `public/wp-content/themes/citadel-construction-group/assets/`.
 
-The hero now uses native scrolling with a fixed runway and reversible, interpolated artwork. The original scroll-locking controller is replaced by `hero-native-scroll.js`; the previous module path re-exports it for compatibility. Navigation explicitly requests smooth movement; restoration remains immediate.
+The React renderer normalizes browser line endings, omits invisible whitespace in the document head, and omits empty image sources in hidden modal placeholders. These adjustments allow clean hydration while preserving the rendered design. The original CSS cascade and media rendering are retained.
 
-Map gradients use a reusable raster alpha mask. Settled map selections, offscreen canvases, hidden-tab animations, and completed logo traces stop rendering. See `SCROLL_FIXES.md` for the changes and browser verification.
+## Verification
 
-`python scripts/check.py` checks JavaScript syntax and local asset completeness. The development server supports `/?qa=scroll` for scroll telemetry; this instrumentation is not included in the deployed website. `scripts/mirror.py` is the original reference importer, not the normal build process; rerunning it can overwrite subsequent frontend edits.
+- `npm run build`: production compilation and static generation.
+- `npm run check`: byte checks for preserved assets and markup, JavaScript syntax, and exported resource availability.
+- `scripts/compare-visuals.py`: REA browser captures and strict, per-pixel comparison of sixteen desktop/mobile states against the preserved original.
+- `scripts/scroll-qa.js`: development-only scroll telemetry through `/?qa=scroll` on the static preview server.
+
+Comparison artifacts and the untouched pre-migration snapshot are stored locally under `evidence/`, which is excluded from Git and deployment. See `NEXT_MIGRATION.md` for the visual and interaction verification results and their limits.
+
+The original importer, `scripts/mirror.py`, is archival and is not part of the Next.js build. The one-time extraction script is also not required to run or build the project.
+
+The preservation manifests record the migration baseline. Update them deliberately when making later content or design changes.

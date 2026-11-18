@@ -2,12 +2,24 @@ import http from 'node:http';
 import { createReadStream, statSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-const root = fileURLToPath(new URL('../dist/', import.meta.url));
+const args = process.argv.slice(2);
+const option = (name, fallback) => args.includes(name) ? args[args.indexOf(name)+1] : fallback;
+const project = fileURLToPath(new URL('../', import.meta.url));
+const root = path.resolve(project, option('--directory', 'out')) + path.sep;
+const port = Number(option('--port', '4173'));
 const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.woff':'font/woff','.mp4':'video/mp4'};
 http.createServer((req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
   if (pathname === '/__scroll-qa.js') {
     res.writeHead(200, {'Content-Type':'text/javascript'}).end(readFileSync(new URL('./scroll-qa.js', import.meta.url)));
+    return;
+  }
+  if (pathname === '/__visual-qa.js') {
+    res.writeHead(200, {'Content-Type':'text/javascript'}).end(readFileSync(new URL('./visual-qa.js', import.meta.url)));
+    return;
+  }
+  if (pathname === '/' && new URL(req.url, 'http://localhost').searchParams.get('qa') === 'visual') {
+    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'}).end(readFileSync(path.join(root,'index.html'),'utf8').replace('<head>','<head><script src="/__visual-qa.js"></script>'));
     return;
   }
   if (pathname === '/' && new URL(req.url, 'http://localhost').searchParams.get('qa') === 'scroll') {
@@ -30,4 +42,4 @@ http.createServer((req, res) => {
       if (req.method === 'HEAD') res.end(); else createReadStream(file).pipe(res);
     }
   } catch { res.writeHead(404,{'Content-Type':'text/plain'}).end('Not found'); }
-}).listen(4173, '0.0.0.0', () => console.log('Local: http://localhost:4173'));
+}).listen(port, '0.0.0.0', () => console.log(`Local: http://localhost:${port}`));

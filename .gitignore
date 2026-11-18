@@ -3,3 +3,6 @@ evidence/
 *.tar.gz
 .sites/
 __pycache__/
+.next/
+out/
+next-env.d.ts
