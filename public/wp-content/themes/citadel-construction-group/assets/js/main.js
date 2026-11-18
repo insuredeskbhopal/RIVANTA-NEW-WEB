@@ -9,7 +9,6 @@ import { initPartnersMarquee } from './modules/partners-marquee.js';
 import { initCaseStudiesCarousel } from './modules/case-studies-carousel.js';
 import { initScrollspyNav } from './modules/scrollspy-nav.js';
 import { initFooterParallaxGradient } from './modules/footer-parallax-gradient.js';
-import { initHeaderLogoCanvas } from './modules/header-logo-canvas.js';
 import { initRandomizedHomepageLists } from './modules/randomized-homepage-lists.js';
 import { initAboutGallery } from './modules/about-gallery.js';
 import { initMapLayout } from './modules/map-layout.js';
@@ -20,7 +19,6 @@ const modules = [
   initScrollRestoration,
   initHeroCanvasSequence,
   initMapLayout,
-  initHeaderLogoCanvas,
   initPartnersMarquee,
   initAboutGallery,
   initCaseStudiesCarousel,

@@ -72,7 +72,7 @@ export function initHeroCanvasSequence() {
         const scale=Math.max(width/maskWidth,height/maskHeight)*2.2*(1-takeover);
         context.save();context.globalCompositeOperation='destination-out';
         context.translate(width/2,height/2);context.scale(scale,scale);
-        context.translate(-maskWidth/2,-maskHeight/2);context.fill(mask);context.restore();
+        context.drawImage(mask,-maskWidth/2,-maskHeight/2,maskWidth,maskHeight);context.restore();
       }
     }
     updateMedia();
@@ -134,9 +134,18 @@ export function initHeroCanvasSequence() {
     fetch(hero.dataset.heroMaskSvg).then(response=>{if(!response.ok)throw new Error('Hero mask unavailable');return response.text();}).then(source=>{
       const svg=new DOMParser().parseFromString(source,'image/svg+xml');
       const bounds=svg.querySelector('svg')?.getAttribute('viewBox')?.split(/\s+/).map(Number);
-      const path=svg.querySelector('path')?.getAttribute('d');
-      if(!path || bounds?.length!==4) return;
-      mask=new Path2D(path);maskWidth=bounds[2];maskHeight=bounds[3];forceDraw=true;schedule();
-    }).catch(()=>{});
+      if(bounds?.length!==4 || !bounds.every(Number.isFinite) || bounds[2]<=0 || bounds[3]<=0) throw new Error('Invalid hero mask bounds');
+      // Decode the complete SVG so every hawk path, cutout, and nested transform
+      // is retained. A single Path2D would discard most of the supplied emblem.
+      const url=URL.createObjectURL(new Blob([source],{type:'image/svg+xml'}));
+      const image=new Image();
+      image.onload=()=>{
+        URL.revokeObjectURL(url);
+        mask=image;maskWidth=bounds[2];maskHeight=bounds[3];
+        hero.dataset.maskState='ready';forceDraw=true;schedule();
+      };
+      image.onerror=()=>{URL.revokeObjectURL(url);hero.dataset.maskState='error';};
+      image.src=url;
+    }).catch(()=>{hero.dataset.maskState='error';});
   }
 }

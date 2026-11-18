@@ -199,6 +199,12 @@ export function initScrollspyNav() {
     const sectionId = currentProbeSectionId || refreshProbeSectionId();
     const surface = resolveSectionSurface(sectionId);
     header.dataset.logoCoverSurface = (isOverHero || surface === 'orange') ? 'hidden' : surface;
+    const heroIsOrange = isOverHero && Number(hero?.dataset.progress || 0) >= 0.55;
+    const footerHeadline = sectionId === 'footer-brand' ? footerBrandSection?.querySelector('.rivanta-footer-headline') : null;
+    const overFooterFade = footerHeadline
+      && (header.offsetHeight - footerHeadline.getBoundingClientRect().top) < footerHeadline.offsetHeight * 0.12;
+    const ink = surface === 'white' || surface === 'orange' || heroIsOrange || overFooterFade ? '#111111' : '#ffffff';
+    if (header.style.getPropertyValue('--rivanta-logo-ink') !== ink) header.style.setProperty('--rivanta-logo-ink', ink);
   };
 
   let currentProbeSectionId = '';

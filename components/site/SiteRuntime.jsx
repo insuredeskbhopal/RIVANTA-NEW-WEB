@@ -119,7 +119,7 @@ export default function SiteRuntime() {
     if (!document.querySelector('script[data-citadel-runtime]')) {
       const script = document.createElement('script');
       script.type = 'module';
-      script.src = '/wp-content/themes/citadel-construction-group/assets/js/main.js?ver=gsap-20261118';
+      script.src = '/wp-content/themes/citadel-construction-group/assets/js/main.js?ver=rivanta-hawk-20261118';
       script.dataset.citadelRuntime = 'true';
       document.body.appendChild(script);
     }
