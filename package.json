@@ -1,0 +1,7 @@
+{
+  "name": "citadel-recreation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portable recreation of the Citadel website and interactive partner map",
+  "scripts": { "dev": "node scripts/serve.mjs", "start": "node scripts/serve.mjs" }
+}
