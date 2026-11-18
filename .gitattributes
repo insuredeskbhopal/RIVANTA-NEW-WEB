@@ -1,0 +1,3 @@
+# Keep the preserved frontend bytes identical on Windows, macOS and Linux.
+/public/** -text
+/content/*.html -text
