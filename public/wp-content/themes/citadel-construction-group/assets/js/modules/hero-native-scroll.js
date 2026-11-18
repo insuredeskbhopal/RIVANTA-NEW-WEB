@@ -15,7 +15,8 @@ export function initHeroCanvasSequence() {
   const clamp=value=>Math.max(0,Math.min(1,value));
   const smoothstep=(start,end,value)=>{const t=clamp((value-start)/(end-start));return t*t*(3-2*t);};
   let width=1,height=1,top=0,range=1,pixelRatio=1;
-  let target=0,progress=0,lastTime=0,raf=0;
+  let target=0,progress=0,lastTime=0,raf=0,heroTrigger=null;
+  const getScrollY=()=>window.citadelScroll?.getY() ?? scrollY;
   let inView=true,forceDraw=true,mask=null,maskWidth=1,maskHeight=1,mediaMode='';
   const propertyValues=new Map();
   const setProperty=(name,value)=>{
@@ -80,9 +81,9 @@ export function initHeroCanvasSequence() {
     raf=0;
     const dt=lastTime ? Math.min(64,time-lastTime) : 16.67;
     lastTime=time;
-    target=motion.matches ? 0 : clamp((scrollY-top)/range);
-    // Smooth only the visuals. Native scrolling remains immediate and reversible.
-    const next=!inView || motion.matches ? target : progress+(target-progress)*(1-Math.exp(-dt/65));
+    target=motion.matches ? 0 : clamp((getScrollY()-top)/range);
+    // ScrollSmoother already interpolates the page; do not add a second lag.
+    const next=window.citadelScroll || !inView || motion.matches ? target : progress+(target-progress)*(1-Math.exp(-dt/65));
     const changed=Math.abs(next-progress)>0.0001;
     progress=Math.abs(target-next)<0.0004 ? target : next;
     if(changed || forceDraw) {forceDraw=false;draw();}
@@ -92,7 +93,7 @@ export function initHeroCanvasSequence() {
   const measure=()=>{
     const rect=visual.getBoundingClientRect();
     width=Math.max(1,Math.round(rect.width));height=Math.max(1,Math.round(rect.height));
-    top=scrollY+hero.getBoundingClientRect().top;range=height*2.2;
+    top=window.citadelScroll?.getTop(hero) ?? scrollY+hero.getBoundingClientRect().top;range=height*2.2;
     pixelRatio=Math.min(devicePixelRatio||1,width<768 ? 1.25 : 1.5);
     const w=Math.round(width*pixelRatio),h=Math.round(height*pixelRatio);
     if(canvas.width!==w || canvas.height!==h) {canvas.width=w;canvas.height=h;}
@@ -100,12 +101,21 @@ export function initHeroCanvasSequence() {
     hero.dataset.sequenceReleaseBoundaryY=String(Math.round(top+range));
     hero.dataset.motion=motion.matches ? 'reduced' : 'standard';
     hero.dataset.sequenceLock='0';forceDraw=true;schedule();
+    if (window.citadelScroll && !heroTrigger && !motion.matches) {
+      heroTrigger=window.citadelScroll.pinHero(hero,hero.querySelector('.citadel-hero-pin'),()=>range);
+    }
+    if (heroTrigger) {
+      if (motion.matches) heroTrigger.disable();
+      else heroTrigger.enable();
+    }
+    dispatchEvent(new Event('citadel:layout'));
   };
   hero.getSequenceNavigationState=()=>({motion:motion.matches ? 'reduced' : 'standard',active:false,locked:false,complete:target>=1,releaseBoundaryY:top+range});
   // Section links never wait for the animation or video playback.
   hero.queueAnchorNavigation=()=>false;
   hero.clearQueuedAnchorNavigation=()=>true;
   addEventListener('scroll',schedule,{passive:true});
+  addEventListener('citadel:scroll',schedule);
   let measureRaf=0;
   const queueMeasure=()=>{if(!measureRaf) measureRaf=requestAnimationFrame(()=>{measureRaf=0;measure();});};
   addEventListener('resize',queueMeasure,{passive:true});
@@ -118,7 +128,7 @@ export function initHeroCanvasSequence() {
     lastTime=0;forceDraw=true;updateMedia();schedule();
   });
   motion.addEventListener('change',()=>{mediaMode='';measure();});
-  addEventListener('pageshow',()=>{progress=clamp((scrollY-top)/range);forceDraw=true;schedule();});
+  addEventListener('pageshow',()=>{progress=clamp((getScrollY()-top)/range);forceDraw=true;schedule();});
   measure();
   if(hero.dataset.heroMaskSvg) {
     fetch(hero.dataset.heroMaskSvg).then(response=>{if(!response.ok)throw new Error('Hero mask unavailable');return response.text();}).then(source=>{

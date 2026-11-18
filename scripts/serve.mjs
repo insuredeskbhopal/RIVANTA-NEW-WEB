@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { createReadStream, statSync, readFileSync } from 'node:fs';
+import { createReadStream, statSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 const args = process.argv.slice(2);
@@ -10,22 +10,6 @@ const port = Number(option('--port', '4173'));
 const types = {'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.webp':'image/webp','.jpg':'image/jpeg','.woff2':'font/woff2','.woff':'font/woff','.mp4':'video/mp4'};
 http.createServer((req, res) => {
   const pathname = decodeURIComponent(new URL(req.url, 'http://localhost').pathname);
-  if (pathname === '/__scroll-qa.js') {
-    res.writeHead(200, {'Content-Type':'text/javascript'}).end(readFileSync(new URL('./scroll-qa.js', import.meta.url)));
-    return;
-  }
-  if (pathname === '/__visual-qa.js') {
-    res.writeHead(200, {'Content-Type':'text/javascript'}).end(readFileSync(new URL('./visual-qa.js', import.meta.url)));
-    return;
-  }
-  if (pathname === '/' && new URL(req.url, 'http://localhost').searchParams.get('qa') === 'visual') {
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'}).end(readFileSync(path.join(root,'index.html'),'utf8').replace('<head>','<head><script src="/__visual-qa.js"></script>'));
-    return;
-  }
-  if (pathname === '/' && new URL(req.url, 'http://localhost').searchParams.get('qa') === 'scroll') {
-    res.writeHead(200, {'Content-Type':'text/html; charset=utf-8'}).end(readFileSync(path.join(root,'index.html'),'utf8').replace('<head>','<head><script src="/__scroll-qa.js"></script>'));
-    return;
-  }
   const file = path.resolve(root, '.' + (pathname === '/' ? '/index.html' : pathname));
   if (!file.startsWith(root)) { res.writeHead(403).end(); return; }
   try {

@@ -41,7 +41,8 @@ export function initScrollspyNav() {
   const resolveAnchorScrollTop = (targetElement, hash = '') => {
     const headerHeight = header.offsetHeight || 0;
     const targetRect = targetElement.getBoundingClientRect();
-    const targetDocumentTop = (window.scrollY || window.pageYOffset || 0) + targetRect.top;
+    const targetDocumentTop = window.citadelScroll?.getTop(targetElement)
+      ?? (window.scrollY || window.pageYOffset || 0) + targetRect.top;
     const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
 
     // Use the section's actual document position rather than re-adding the current scroll
@@ -62,7 +63,7 @@ export function initScrollspyNav() {
       return;
     }
 
-    const currentScrollY = window.scrollY || window.pageYOffset || 0;
+    const currentScrollY = window.citadelScroll?.getY() ?? window.scrollY ?? 0;
     const headerHeight = header.offsetHeight || 0;
     const scrollTop = resolveAnchorScrollTop(anchorTarget.element, hash);
     const heroRect = hero ? hero.getBoundingClientRect() : null;
@@ -104,7 +105,10 @@ export function initScrollspyNav() {
       }
     }
 
-    window.scrollTo({ top: scrollTop, behavior: scrollBehavior });
+    if (window.citadelScroll) window.citadelScroll.toSection(anchorTarget.element,
+      () => (header.offsetHeight || 0) - (window.matchMedia('(max-width: 767px)').matches ? 16 : 2),
+      scrollBehavior === 'smooth');
+    else window.scrollTo({ top: scrollTop, behavior: scrollBehavior });
   };
 
   const handleIncomingHash = (hash) => {
@@ -535,7 +539,8 @@ export function initScrollspyNav() {
       const index = MOBILE_NAV_SECTIONS.indexOf(currentSectionId);
       if (index === 0) {
         window.history.pushState(null, '', '#hero');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.citadelScroll) window.citadelScroll.to(0);
+        else window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (index > 0) {
         navigateToAnchor('#' + MOBILE_NAV_SECTIONS[index - 1]);
       }
@@ -622,7 +627,7 @@ export function initScrollspyNav() {
     }
 
     const headerHeight = header.offsetHeight || 0;
-    const scrollTop = window.scrollY || window.pageYOffset || 0;
+    const scrollTop = window.citadelScroll?.getY() ?? window.scrollY ?? 0;
     const heroBottomY = hero.offsetTop + hero.offsetHeight;
     const aboutThresholdY = Math.max(0, aboutSection.offsetTop - headerHeight - 4);
     const isOverHero = scrollTop + headerHeight < heroBottomY;
@@ -685,6 +690,7 @@ export function initScrollspyNav() {
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('citadel:scroll', onScroll);
   window.addEventListener('citadel:hero-phase', onScroll);
   window.addEventListener('resize', onScroll);
   window.addEventListener('hashchange', () => {

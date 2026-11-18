@@ -11,17 +11,21 @@ export default function HomePage() {
     <>
       <SkipLink />
       <SiteHeader />
-      <main id={documentAttributes.main.id} className={documentAttributes.main.class}>
-        <Hero />
-        <About />
-        <PartnerNetwork />
-        <CaseStudies />
-        <PartnerMap />
-        <Principals />
-        <PartnerDirectory />
-        <FooterBrand />
-      </main>
-      <FooterMetadata />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <main id={documentAttributes.main.id} className={documentAttributes.main.class}>
+            <Hero />
+            <About />
+            <PartnerNetwork />
+            <CaseStudies />
+            <PartnerMap />
+            <Principals />
+            <PartnerDirectory />
+            <FooterBrand />
+          </main>
+          <FooterMetadata />
+        </div>
+      </div>
     </>
   );
 }

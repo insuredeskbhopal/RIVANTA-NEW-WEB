@@ -65,6 +65,7 @@ export function initCaseStudiesCarousel() {
     }
 
     modal.hidden = true;
+    window.citadelScroll?.smoother.paused(false);
     modalState.isOpen = false;
     document.documentElement.classList.remove('is-case-study-modal-open');
     document.body.classList.remove('is-case-study-modal-open');
@@ -179,6 +180,7 @@ export function initCaseStudiesCarousel() {
     modalState.opener = trigger;
     modalState.isOpen = true;
     modal.hidden = false;
+    window.citadelScroll?.smoother.paused(true);
     module.dataset.caseStudyModalState = 'open';
     document.documentElement.classList.add('is-case-study-modal-open');
     document.body.classList.add('is-case-study-modal-open');

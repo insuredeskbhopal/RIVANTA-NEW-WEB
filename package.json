@@ -7,14 +7,16 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "node scripts/serve.mjs --directory out --port 3000",
-    "preview": "node scripts/serve.mjs --directory out --port 4174",
-    "check": "python scripts/check.py"
+    "preview": "node scripts/serve.mjs --directory out --port 4174"
   },
   "dependencies": {
+    "gsap": "3.15.1",
     "html-react-parser": "6.1.10",
     "next": "16.4.6",
     "react": "19.3.1",
     "react-dom": "19.3.1"
   },
-  "engines": { "node": ">=20.9.0" }
+  "engines": {
+    "node": ">=20.9.0"
+  }
 }

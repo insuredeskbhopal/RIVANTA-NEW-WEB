@@ -47,7 +47,7 @@ export function initScrollRestoration() {
   let saveRafId = null;
   const saveScrollPosition = () => {
     try {
-      sessionStorage.setItem(storageKey, String(Math.round(window.scrollY || window.pageYOffset || 0)));
+      sessionStorage.setItem(storageKey, String(Math.round(window.citadelScroll?.getY() ?? window.scrollY ?? 0)));
     } catch {
       // Storage may be unavailable (private mode quotas); restoration is optional.
     }
@@ -125,7 +125,8 @@ export function initScrollRestoration() {
     }
 
     const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    window.scrollTo({ top: Math.min(savedY, maxScroll), behavior: 'instant' });
+    if (window.citadelScroll) window.citadelScroll.to(Math.min(savedY, maxScroll), false);
+    else window.scrollTo({ top: Math.min(savedY, maxScroll), behavior: 'instant' });
   };
 
   // Every document height change (late images, font swaps, JS-sized sections)
@@ -139,7 +140,7 @@ export function initScrollRestoration() {
     settleObserver = new ResizeObserver(() => {
       assertScrollPosition();
     });
-    settleObserver.observe(document.body);
+    settleObserver.observe(document.getElementById('smooth-content') || document.body);
     stabilizeTimerId = window.setTimeout(stopStabilizing, 4500);
   };
 

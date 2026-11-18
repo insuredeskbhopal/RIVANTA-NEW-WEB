@@ -1,5 +1,7 @@
 /* Stable geometry: animation changes pixels, never the scroll position. */
 html { scroll-behavior:auto; scrollbar-gutter:stable; background:#000; }
+#smooth-content { width:100%; }
+html[data-scroll-engine="gsap"] .citadel-hero-pin { position:relative; }
 .citadel-site-header { width:100%; max-width:100%; }
 .citadel-site-header-inner { max-width:100%; }
 .citadel-hero { --hero-stage-vh:100svh; --hero-live-vh:100svh; --hero-scroll-distance-px:320svh; --hero-vv-offset-top:0px; overflow-anchor:none; }

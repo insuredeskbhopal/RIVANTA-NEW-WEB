@@ -870,6 +870,7 @@ export async function initHeaderLogoCanvas() {
   };
 
   window.addEventListener('scroll', refreshOnScroll, { passive: true });
+  window.addEventListener('citadel:scroll', refreshOnScroll);
   window.addEventListener('citadel:hero-phase', refreshOnScroll);
 
   brand.classList.add('is-logo-canvas-ready');
