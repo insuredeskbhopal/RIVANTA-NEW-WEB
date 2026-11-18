@@ -1,6 +1,19 @@
 /* Stable geometry: animation changes pixels, never the scroll position. */
 html { scroll-behavior:auto; scrollbar-gutter:stable; background:#000; }
 #smooth-content { width:100%; }
+.rivanta-footer-brand .citadel-container { width:100%; max-width:100%; margin-inline:0; }
+/* Crop the transparent padding without stretching the supplied artwork.
+   The 1916x821 image contains a visible 1849x521 wordmark. */
+.rivanta-footer-headline { aspect-ratio:1849 / 521; }
+.rivanta-footer-artwork {
+  position:absolute;
+  display:block;
+  max-width:none;
+  width:103.624%;
+  height:auto;
+  left:-2.975%;
+  top:-28.599%;
+}
 html[data-scroll-engine="gsap"] .citadel-hero-pin { position:relative; }
 .citadel-site-header { width:100%; max-width:100%; }
 .citadel-site-header-inner { max-width:100%; }
