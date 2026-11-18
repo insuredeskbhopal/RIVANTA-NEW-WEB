@@ -1,0 +1,40 @@
+/* Stable geometry: animation changes pixels, never the scroll position. */
+html { scroll-behavior:auto; scrollbar-gutter:stable; background:#000; }
+.citadel-site-header { width:100%; max-width:100%; }
+.citadel-site-header-inner { max-width:100%; }
+.citadel-hero { --hero-stage-vh:100svh; --hero-live-vh:100svh; --hero-scroll-distance-px:320svh; --hero-vv-offset-top:0px; overflow-anchor:none; }
+#case-studies { --case-studies-copy-height:500px; }
+.citadel-case-studies-partner-logo-wrap { height:60px; min-height:60px; flex:0 0 60px; }
+.citadel-case-studies-partner-logo { max-height:52px; }
+.citadel-case-studies .citadel-carousel-dots {
+  min-height:var(--pager-dot-size);
+  min-width:calc(7 * var(--pager-dot-size) + var(--pager-active-width) + 7 * clamp(.52rem,.42vw,.78rem));
+}
+.citadel-hero-pin { top:0; }
+.citadel-hero-visual { perspective:none; }
+.citadel-hero-canvas { inset:0; width:100%; height:100%; transform:none; zoom:1; }
+.citadel-hero-opening,.citadel-hero-final { backface-visibility:hidden; will-change:opacity,transform; }
+.citadel-hero-opening { padding-inline:20px; }
+.citadel-hero-final { padding:100px 24px 32px; }
+.citadel-hero-metrics { max-height:none; margin-top:clamp(2rem,6vh,3.4rem); overflow:visible; }
+.citadel-hero-final-text { transform:translateY(calc((1 - var(--hero-metrics-visibility)) * 20px)); }
+section[id] { scroll-margin-top:112px; }
+.citadel-map,.citadel-case-studies { overflow-anchor:none; }
+@media (min-width:768px) and (max-width:1139px) {
+  #case-studies { --case-studies-copy-height:400px; }
+}
+@media (max-width:767px) {
+  #case-studies { --case-studies-copy-height:200px; }
+  .citadel-site-header .citadel-site-header-inner { width:100%; box-sizing:border-box; }
+  .citadel-hero-final { padding:92px 20px 24px; }
+  .citadel-hero-final-text { font-size:clamp(1.7rem,7vw,2.5rem); }
+  .citadel-hero-metrics { gap:18px; margin-top:24px; }
+  .citadel-hero-metric-value { font-size:2rem; }
+  .citadel-hero-metric-label { font-size:.78rem; margin-top:.35rem; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .citadel-hero { --hero-scroll-distance-px:100svh; }
+  html { scroll-behavior:auto !important; }
+  .citadel-hero-opening,.citadel-hero-final { will-change:auto; }
+  .citadel-hero-pin { position:relative; }
+}

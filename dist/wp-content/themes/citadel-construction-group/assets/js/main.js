@@ -1,10 +1,10 @@
 // Bump this when you want to force all clients to load fresh JS.
 // Changing this value saves the file with a new mtime, which causes
 // citadel_asset_version() in PHP to append a new ?ver= query string.
-const THEME_JS_VERSION = '0.1.1';
+const THEME_JS_VERSION = '0.2.0';
 
 import { initScrollRestoration } from './modules/scroll-restoration.js';
-import { initHeroCanvasSequence } from './modules/hero-canvas-sequence.js';
+import { initHeroCanvasSequence } from './modules/hero-native-scroll.js';
 import { initPartnersMarquee } from './modules/partners-marquee.js';
 import { initCaseStudiesCarousel } from './modules/case-studies-carousel.js';
 import { initScrollspyNav } from './modules/scrollspy-nav.js';
@@ -12,12 +12,14 @@ import { initFooterParallaxGradient } from './modules/footer-parallax-gradient.j
 import { initHeaderLogoCanvas } from './modules/header-logo-canvas.js';
 import { initRandomizedHomepageLists } from './modules/randomized-homepage-lists.js';
 import { initAboutGallery } from './modules/about-gallery.js';
+import { initMapLayout } from './modules/map-layout.js';
 
 const modules = [
   // Must run first: strips reload hashes and takes over restoration before
   // hero/scrollspy read location.hash or scroll state during their init.
   initScrollRestoration,
   initHeroCanvasSequence,
+  initMapLayout,
   initHeaderLogoCanvas,
   initPartnersMarquee,
   initAboutGallery,
@@ -73,11 +75,12 @@ const getInteractiveMapModulePath = () => {
   return './modules/interactive-map.js';
 };
 
-const initInteractiveMapModule = async () => {
-  const module = await import(getInteractiveMapModulePath());
-  if (typeof module.initInteractiveMap === 'function') {
-    await module.initInteractiveMap();
+let mapInitialization = null;
+const initInteractiveMapModule = () => {
+  if (!mapInitialization) {
+    mapInitialization = import(getInteractiveMapModulePath()).then((module) => module.initInteractiveMap?.());
   }
+  return mapInitialization;
 };
 
 const boot = () => {
@@ -92,6 +95,11 @@ const boot = () => {
   });
 
   initWhenNearViewport('[data-module="interactive-map"]', initInteractiveMapModule);
+  // Warm the canvas during idle time instead of compiling its scene on the
+  // first scroll into the map. The observer and idle path share one promise.
+  const warmMap = () => initInteractiveMapModule().catch((error) => console.error('Citadel map initialization failed', error));
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(warmMap, { timeout: 1200 });
+  else setTimeout(warmMap, 200);
   initWhenNearViewport('[data-module="footer-parallax-gradient"]', initFooterParallaxGradient);
 };
 

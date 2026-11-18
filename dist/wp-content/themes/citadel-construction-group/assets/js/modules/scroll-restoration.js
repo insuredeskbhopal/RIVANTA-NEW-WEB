@@ -115,8 +115,8 @@ export function initScrollRestoration() {
     userTookOver = true;
     stopStabilizing();
   };
-  ['wheel', 'touchstart', 'keydown'].forEach((type) => {
-    window.addEventListener(type, markUserTakeover, { passive: true, once: true });
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach((type) => {
+    window.addEventListener(type, markUserTakeover, { passive: true, once: true, capture: true });
   });
 
   const assertScrollPosition = () => {

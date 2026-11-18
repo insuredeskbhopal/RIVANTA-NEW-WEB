@@ -46,14 +46,15 @@ export function initScrollspyNav() {
 
     // Use the section's actual document position rather than re-adding the current scroll
     // offset, which causes deep-link jumps to drift by one section when the hero pin is active.
-    const anchorGap = isMobileViewport && hash !== '#principals' ? 2 : 0;
-    return Math.max(0, targetDocumentTop - (isMobileViewport ? headerHeight : 0) - anchorGap);
+    // Put the header probe inside the destination. Leaving it a few pixels
+    // above About hides the mobile pager and changes the header height again.
+    return Math.max(0, targetDocumentTop - headerHeight + (isMobileViewport ? 16 : 2));
   };
 
   const navigateToAnchor = (hash, options = {}) => {
     const {
       updateHistory = true,
-      scrollBehavior = 'smooth',
+      scrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
       forceQueueThroughHero = false,
     } = options;
     const anchorTarget = getAnchorTarget(hash);
@@ -156,6 +157,14 @@ export function initScrollspyNav() {
   });
 
   const ctaLink = header.querySelector('.citadel-site-header-cta');
+  document.querySelectorAll('main a[href^="#"]').forEach((link) => {
+    const hash = link.getAttribute('href');
+    if (!getAnchorTarget(hash)) return;
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      navigateToAnchor(hash);
+    });
+  });
   const navRoot = header.querySelector('.citadel-site-nav');
   const prevArrow = header.querySelector('[data-mobile-nav-prev]');
   const nextArrow = header.querySelector('[data-mobile-nav-next]');
@@ -266,7 +275,7 @@ export function initScrollspyNav() {
     }
 
     const progress = Number.parseFloat(hero.dataset.progress || '0');
-    const overlayStart = Number.parseFloat(hero.dataset.heroOverlayTiming || '0.52');
+    const overlayStart = hero.dataset.controller === 'native-scroll' ? 0.28 : Number.parseFloat(hero.dataset.heroOverlayTiming || '0.52');
     if (!Number.isFinite(progress) || !Number.isFinite(overlayStart)) {
       return false;
     }
@@ -630,15 +639,6 @@ export function initScrollspyNav() {
   };
 
   const updateActiveState = () => {
-    if (window.location.hash && window.location.hash !== '#hero') {
-      const hashSectionId = window.location.hash.slice(1);
-      const hashSection = document.getElementById(hashSectionId);
-      if (hashSection) {
-        forceHashActiveState(hashSectionId);
-        return;
-      }
-    }
-
     const probeSectionId = currentProbeSectionId || refreshProbeSectionId();
 
     if (probeSectionId === 'hero' || shouldHideHeaderForSection(probeSectionId)) {
@@ -685,6 +685,7 @@ export function initScrollspyNav() {
   };
 
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('citadel:hero-phase', onScroll);
   window.addEventListener('resize', onScroll);
   window.addEventListener('hashchange', () => {
     handleIncomingHash(window.location.hash);
@@ -768,6 +769,26 @@ export function initScrollspyNav() {
   updateMobileHeaderCompactState();
 
   if (window.location.hash && window.location.hash !== '#hero') {
+    const initialHash = window.location.hash;
+    let userHasInteracted = false;
+    let anchorLayoutObserver = null;
+    ['pointerdown', 'wheel', 'touchstart', 'keydown'].forEach(type => {
+      window.addEventListener(type, () => {
+        userHasInteracted = true;
+        anchorLayoutObserver?.disconnect();
+      }, { once: true, passive: true, capture: true });
+    });
+    const settleInitialAnchor = () => {
+      if (!userHasInteracted && window.location.hash === initialHash) {
+        navigateToAnchor(initialHash, { updateHistory: false, scrollBehavior: 'auto' });
+      }
+    };
+    document.fonts?.ready.then(() => requestAnimationFrame(settleInitialAnchor));
+    window.addEventListener('citadel:layout-ready', settleInitialAnchor, { once: true });
+    window.addEventListener('load', settleInitialAnchor, { once: true });
+    anchorLayoutObserver = new ResizeObserver(settleInitialAnchor);
+    anchorLayoutObserver.observe(document.body);
+    setTimeout(() => anchorLayoutObserver.disconnect(), 2000);
     window.requestAnimationFrame(() => {
       handleIncomingHash(window.location.hash);
     });

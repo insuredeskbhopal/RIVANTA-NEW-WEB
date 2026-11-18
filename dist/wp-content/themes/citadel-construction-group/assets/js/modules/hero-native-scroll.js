@@ -1,0 +1,132 @@
+// Scroll progress controls the artwork; media never changes page geometry or input.
+export function initHeroCanvasSequence() {
+  const hero=document.querySelector('[data-module="hero-canvas-sequence"]');
+  if (!hero || hero.dataset.controller==='native-scroll') return;
+  const visual=hero.querySelector('.citadel-hero-visual');
+  const canvas=hero.querySelector('.citadel-hero-canvas');
+  const context=canvas?.getContext('2d',{alpha:true});
+  if (!visual || !context) return;
+  hero.dataset.controller='native-scroll';
+  const openingVideo=hero.querySelector('.citadel-hero-video');
+  const closingVideo=hero.querySelector('.citadel-hero-video-secondary');
+  const motion=matchMedia('(prefers-reduced-motion: reduce)');
+  const metricNodes=['projects','project-value','employees-k'].map(name=>hero.querySelector(`[data-metric="${name}"]`));
+  const metricTargets=[Number(hero.dataset.heroMetricTotalProjects)||21,Number(hero.dataset.heroMetricTotalProjectValueBn)||10,Number(hero.dataset.heroMetricCombinedEmployeesK)||2.4];
+  const clamp=value=>Math.max(0,Math.min(1,value));
+  const smoothstep=(start,end,value)=>{const t=clamp((value-start)/(end-start));return t*t*(3-2*t);};
+  let width=1,height=1,top=0,range=1,pixelRatio=1;
+  let target=0,progress=0,lastTime=0,raf=0;
+  let inView=true,forceDraw=true,mask=null,maskWidth=1,maskHeight=1,mediaMode='';
+  const propertyValues=new Map();
+  const setProperty=(name,value)=>{
+    const text=Number(value).toFixed(3);
+    if (propertyValues.get(name)!==text) {hero.style.setProperty(name,text);propertyValues.set(name,text);}
+  };
+  const play=video=>{if(video?.paused && !document.hidden) video.play()?.catch(()=>{});};
+  const updateMedia=()=>{
+    const mode=document.hidden || !inView || motion.matches ? 'paused' : progress<0.76 ? 'opening' : 'closing';
+    if(mode===mediaMode) return;
+    mediaMode=mode;
+    if(mode==='opening') {play(openingVideo);closingVideo?.pause();}
+    else if(mode==='closing') {openingVideo?.pause();play(closingVideo);}
+    else {openingVideo?.pause();closingVideo?.pause();}
+  };
+  if(closingVideo) {
+    closingVideo.loop=true;
+    closingVideo.addEventListener('loadeddata',()=>{forceDraw=true;schedule();});
+  }
+
+  const draw=()=>{
+    const takeover=smoothstep(0.08,0.80,progress);
+    const heading=smoothstep(0.60,0.77,progress);
+    const metrics=smoothstep(0.74,0.96,progress);
+    const hasClosingFrame=closingVideo && closingVideo.readyState>=2;
+    const closing=hasClosingFrame ? smoothstep(0.80,0.93,progress) : 0;
+    setProperty('--hero-progress',progress);
+    setProperty('--hero-opening-visibility',1-smoothstep(0.28,0.50,progress));
+    setProperty('--hero-final-progress',heading);
+    setProperty('--hero-final-shift-progress',metrics);
+    setProperty('--hero-metrics-visibility',metrics);
+    setProperty('--hero-secondary-visibility',hasClosingFrame ? smoothstep(0.74,0.80,progress) : 0);
+    setProperty('--hero-overlay-visibility',1-closing);
+    hero.dataset.progress=progress.toFixed(3);
+    hero.dataset.sequenceComplete=target>=0.999 ? '1' : '0';
+    hero.dataset.sequenceActive=target>0 && target<1 ? '1' : '0';
+    const phase=progress<0.28 ? 'opening' : progress<0.55 ? 'takeover' : 'final';
+    if(hero.dataset.visualPhase!==phase) {
+      hero.dataset.visualPhase=phase;
+      dispatchEvent(new Event('citadel:hero-phase'));
+    }
+    metricNodes.forEach((node,index)=>{
+      if(!node) return;
+      const amount=metricTargets[index]*smoothstep(0.74+index*0.035,0.92+index*0.02,progress);
+      const text=index===0 ? Math.round(amount).toLocaleString('en-US') : String(Math.round(amount*10)/10);
+      if(node.textContent!==text) node.textContent=text;
+    });
+    context.setTransform(pixelRatio,0,0,pixelRatio,0,0);
+    context.clearRect(0,0,width,height);
+    if(takeover>0 && closing<1) {
+      context.fillStyle='#ed730c';context.fillRect(0,0,width,height);
+      if(mask && takeover<0.9999) {
+        const scale=Math.max(width/maskWidth,height/maskHeight)*2.2*(1-takeover);
+        context.save();context.globalCompositeOperation='destination-out';
+        context.translate(width/2,height/2);context.scale(scale,scale);
+        context.translate(-maskWidth/2,-maskHeight/2);context.fill(mask);context.restore();
+      }
+    }
+    updateMedia();
+  };
+  const frame=time=>{
+    raf=0;
+    const dt=lastTime ? Math.min(64,time-lastTime) : 16.67;
+    lastTime=time;
+    target=motion.matches ? 0 : clamp((scrollY-top)/range);
+    // Smooth only the visuals. Native scrolling remains immediate and reversible.
+    const next=!inView || motion.matches ? target : progress+(target-progress)*(1-Math.exp(-dt/65));
+    const changed=Math.abs(next-progress)>0.0001;
+    progress=Math.abs(target-next)<0.0004 ? target : next;
+    if(changed || forceDraw) {forceDraw=false;draw();}
+    if(inView && !document.hidden && Math.abs(target-progress)>0.0004) schedule();
+  };
+  function schedule() {if(!raf && !document.hidden) raf=requestAnimationFrame(frame);}
+  const measure=()=>{
+    const rect=visual.getBoundingClientRect();
+    width=Math.max(1,Math.round(rect.width));height=Math.max(1,Math.round(rect.height));
+    top=scrollY+hero.getBoundingClientRect().top;range=height*2.2;
+    pixelRatio=Math.min(devicePixelRatio||1,width<768 ? 1.25 : 1.5);
+    const w=Math.round(width*pixelRatio),h=Math.round(height*pixelRatio);
+    if(canvas.width!==w || canvas.height!==h) {canvas.width=w;canvas.height=h;}
+    hero.style.setProperty('--hero-scroll-distance-px',`${motion.matches ? height : height+range}px`);
+    hero.dataset.sequenceReleaseBoundaryY=String(Math.round(top+range));
+    hero.dataset.motion=motion.matches ? 'reduced' : 'standard';
+    hero.dataset.sequenceLock='0';forceDraw=true;schedule();
+  };
+  hero.getSequenceNavigationState=()=>({motion:motion.matches ? 'reduced' : 'standard',active:false,locked:false,complete:target>=1,releaseBoundaryY:top+range});
+  // Section links never wait for the animation or video playback.
+  hero.queueAnchorNavigation=()=>false;
+  hero.clearQueuedAnchorNavigation=()=>true;
+  addEventListener('scroll',schedule,{passive:true});
+  let measureRaf=0;
+  const queueMeasure=()=>{if(!measureRaf) measureRaf=requestAnimationFrame(()=>{measureRaf=0;measure();});};
+  addEventListener('resize',queueMeasure,{passive:true});
+  new ResizeObserver(queueMeasure).observe(visual);
+  new IntersectionObserver(entries=>{
+    inView=entries[0].isIntersecting;forceDraw=true;lastTime=0;updateMedia();schedule();
+  },{threshold:0}).observe(hero);
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden && raf) {cancelAnimationFrame(raf);raf=0;}
+    lastTime=0;forceDraw=true;updateMedia();schedule();
+  });
+  motion.addEventListener('change',()=>{mediaMode='';measure();});
+  addEventListener('pageshow',()=>{progress=clamp((scrollY-top)/range);forceDraw=true;schedule();});
+  measure();
+  if(hero.dataset.heroMaskSvg) {
+    fetch(hero.dataset.heroMaskSvg).then(response=>{if(!response.ok)throw new Error('Hero mask unavailable');return response.text();}).then(source=>{
+      const svg=new DOMParser().parseFromString(source,'image/svg+xml');
+      const bounds=svg.querySelector('svg')?.getAttribute('viewBox')?.split(/\s+/).map(Number);
+      const path=svg.querySelector('path')?.getAttribute('d');
+      if(!path || bounds?.length!==4) return;
+      mask=new Path2D(path);maskWidth=bounds[2];maskHeight=bounds[3];forceDraw=true;schedule();
+    }).catch(()=>{});
+  }
+}

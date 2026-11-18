@@ -639,6 +639,9 @@ const isHeroOrangePhase = (heroElement, headerElement) => {
 
   const sequenceLocked = heroElement.dataset.sequenceLock === '1';
   const sequenceComplete = heroElement.dataset.sequenceComplete === '1';
+  if (heroElement.dataset.controller === 'native-scroll') {
+    return Number(heroElement.dataset.progress || 0) >= 0.55;
+  }
   return sequenceLocked || sequenceComplete;
 };
 
@@ -800,6 +803,7 @@ export async function initHeaderLogoCanvas() {
   refreshUsOutlineColor();
 
   if (!isTraceDone) {
+    let traceTickerListener;
     const onTick = () => {
       const elapsedMs = performance.now() - startedAt;
       const linearProgress = Math.max(0, Math.min(1, elapsedMs / TRACE_DURATION_MS));
@@ -811,12 +815,12 @@ export async function initHeaderLogoCanvas() {
 
       if (linearProgress >= 1) {
         isTraceDone = true;
-        createjsGlobal.Ticker.off('tick', onTick);
+        createjsGlobal.Ticker.off('tick', traceTickerListener);
       }
     };
 
     createjsGlobal.Ticker.framerate = 60;
-    createjsGlobal.Ticker.on('tick', onTick);
+    traceTickerListener = createjsGlobal.Ticker.on('tick', onTick);
   }
 
   if (typeof ResizeObserver !== 'undefined') {
@@ -866,6 +870,7 @@ export async function initHeaderLogoCanvas() {
   };
 
   window.addEventListener('scroll', refreshOnScroll, { passive: true });
+  window.addEventListener('citadel:hero-phase', refreshOnScroll);
 
   brand.classList.add('is-logo-canvas-ready');
   fallbackLogo.setAttribute('aria-hidden', 'true');

@@ -21,3 +21,11 @@ The recreation uses public frontend HTML, CSS, JavaScript, and media from the us
 `scripts/mirror.py` documents the asset localization process. `evidence/asset-manifest.json` records reference asset URLs and hashes; `evidence/inspection.md` records the REA observations and validation results.
 
 This is a static frontend recreation. WordPress editing and backend services are outside its scope.
+
+## Animation and scrolling
+
+The hero now uses native scrolling with a fixed runway and reversible, interpolated artwork. The original scroll-locking controller is replaced by `hero-native-scroll.js`; the previous module path re-exports it for compatibility. Navigation explicitly requests smooth movement; restoration remains immediate.
+
+Map gradients use a reusable raster alpha mask. Settled map selections, offscreen canvases, hidden-tab animations, and completed logo traces stop rendering. See `SCROLL_FIXES.md` for the changes and browser verification.
+
+`python scripts/check.py` checks JavaScript syntax and local asset completeness. The development server supports `/?qa=scroll` for scroll telemetry; this instrumentation is not included in the deployed website. `scripts/mirror.py` is the original reference importer, not the normal build process; rerunning it can overwrite subsequent frontend edits.

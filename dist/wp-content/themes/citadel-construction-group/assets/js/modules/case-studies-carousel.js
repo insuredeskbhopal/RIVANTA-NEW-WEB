@@ -71,7 +71,7 @@ export function initCaseStudiesCarousel() {
     module.dataset.caseStudyModalState = 'closed';
 
     if (modalState.opener && typeof modalState.opener.focus === 'function') {
-      modalState.opener.focus();
+      modalState.opener.focus({ preventScroll: true });
     }
 
     modalState.opener = null;
@@ -184,7 +184,7 @@ export function initCaseStudiesCarousel() {
     document.body.classList.add('is-case-study-modal-open');
 
     if (modalCloseButton) {
-      modalCloseButton.focus();
+      modalCloseButton.focus({ preventScroll: true });
     }
   };
 
@@ -693,6 +693,7 @@ export function initCaseStudiesCarousel() {
       updateArrowPositions();
       showArrows();
       module.dataset.status = 'ready';
+      window.dispatchEvent(new Event('citadel:layout-ready'));
     })
     .catch((error) => {
       module.dataset.status = 'embla-load-failed';

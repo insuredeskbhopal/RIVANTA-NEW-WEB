@@ -78,7 +78,12 @@ export function createExperiment3IntroController(config) {
     });
   };
 
-  const cancelCycle = () => {
+  const cancelCycle = ({ complete = true } = {}) => {
+    if (complete) {
+      introCompletedOnce = true;
+      module.dataset.loaded = 'true';
+      module.dataset.introState = 'resting';
+    }
     if (!introCycleActive && !introCycleStarted) {
       return;
     }
@@ -255,10 +260,12 @@ export function createExperiment3IntroController(config) {
 
   const armMapIntroOnViewportEntry = () => {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isRestoredPage = performance.getEntriesByType('navigation')[0]?.type === 'reload';
+    const isDirectMapLoad = window.location.hash === '#map';
     module.dataset.loaded = 'false';
     module.dataset.introState = 'armed';
 
-    if (reducedMotion) {
+    if (reducedMotion || isRestoredPage || isDirectMapLoad) {
       module.dataset.loaded = 'true';
       module.dataset.introState = 'resting';
       introCompletedOnce = true;
@@ -288,6 +295,9 @@ export function createExperiment3IntroController(config) {
     };
 
     const resetIntro = () => {
+      if (module.dataset.activeKey) {
+        return;
+      }
       if (!introPlayed && !introCompletedOnce) {
         return;
       }
@@ -303,7 +313,7 @@ export function createExperiment3IntroController(config) {
       delete module.dataset.introCycleActive;
       clearRippleOverlay();
       hideAllPinsForIntro();
-      cancelCycle();
+      cancelCycle({ complete: false });
       introCycleStarted = false;
       resetBaseGradientAlpha();
       resetMobileMapView(() => {

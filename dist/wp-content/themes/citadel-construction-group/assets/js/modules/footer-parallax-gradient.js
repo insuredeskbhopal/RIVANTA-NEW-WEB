@@ -112,6 +112,8 @@ export async function initFooterParallaxGradient() {
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let loopRafId = 0;
+  let isVisible = false;
+  let geometry = { width: 1, height: 1 };
 
   const stage = new createjsGlobal.Stage(canvas);
   stage.autoClear = true;
@@ -135,17 +137,22 @@ export async function initFooterParallaxGradient() {
     const { width, height } = getScaledCanvasRect(canvas);
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
-    canvas.width = Math.max(1, Math.round(width * pixelRatio));
-    canvas.height = Math.max(1, Math.round(height * pixelRatio));
+    const nextWidth = Math.max(1, Math.round(width * pixelRatio));
+    const nextHeight = Math.max(1, Math.round(height * pixelRatio));
+    if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+      canvas.width = nextWidth;
+      canvas.height = nextHeight;
+    }
 
     stage.scaleX = pixelRatio;
     stage.scaleY = pixelRatio;
 
-    return { width, height };
+    geometry = { width, height };
+    return geometry;
   };
 
   const renderFrame = (timestamp) => {
-    const { width, height } = resizeStage();
+    const { width, height } = geometry;
     const animationEnabled = !prefersReducedMotion.matches && window.innerWidth > MOBILE_MAX_WIDTH;
     const maxScrollable = Math.max((document.documentElement.scrollHeight || 1) - (window.innerHeight || 1), 1);
     const scrollProgress = animationEnabled ? clamp((window.scrollY || 0) / maxScrollable, 0, 1) : 0.5;
@@ -196,6 +203,10 @@ export async function initFooterParallaxGradient() {
   };
 
   const updateAnimation = () => {
+    if (!isVisible || document.hidden) {
+      stopLoop();
+      return;
+    }
     const animationEnabled = !prefersReducedMotion.matches && window.innerWidth > MOBILE_MAX_WIDTH;
     if (!animationEnabled) {
       stopLoop();
@@ -218,17 +229,24 @@ export async function initFooterParallaxGradient() {
   section.classList.add('has-canvas');
   headline.classList.add('has-canvas');
   setFallbackState(false);
+  resizeStage();
   renderFrame(0);
-  updateAnimation();
+  const visibilityObserver = new IntersectionObserver((entries) => {
+    isVisible = entries[0].isIntersecting;
+    updateAnimation();
+  }, { threshold: 0 });
+  visibilityObserver.observe(section);
+  document.addEventListener('visibilitychange', updateAnimation);
 
   window.addEventListener('scroll', () => {
-    if (loopRafId === 0) {
+    if (isVisible && !document.hidden && loopRafId === 0) {
       renderFrame(performance.now());
     }
   }, { passive: true });
 
   window.addEventListener('resize', () => {
     stopLoop();
+    resizeStage();
     updateAnimation();
   }, { passive: true });
 

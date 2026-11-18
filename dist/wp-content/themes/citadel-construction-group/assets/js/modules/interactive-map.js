@@ -1,5 +1,6 @@
 import { createExperiment3IntroController } from './interactive-map-experiment-3-intro.js';
 import { createInteractiveMapPinController } from './interactive-map-pin-controller.js';
+import { fitMapToViewport } from './map-layout.js';
 
 const MAP_COMPOSITION_ID = '6BBC61D64AAC439EB6CBC155EFAE038B';
 
@@ -133,7 +134,7 @@ export async function initInteractiveMap() {
       return;
     }
 
-    const shouldAttach = stageRenderingRequested && stageIsVisible;
+    const shouldAttach = stageRenderingRequested && stageIsVisible && !document.hidden;
     if (shouldAttach === stageTickAttached) {
       return;
     }
@@ -144,6 +145,7 @@ export async function initInteractiveMap() {
       window.createjs.Ticker.removeEventListener('tick', stageTickHandler);
     }
     stageTickAttached = shouldAttach;
+    module.dataset.renderState = shouldAttach ? 'running' : 'paused';
   };
 
   const renderStageOnce = () => {
@@ -930,8 +932,49 @@ export async function initInteractiveMap() {
   const gradientVisualCenter = { x: 638.9, y: 404.7 };
   const gradientTweenState = { x: gradientVisualCenter.x, y: gradientVisualCenter.y };
 
+  let paintGradientBitmap = null;
+  const installGradientBitmap = () => {
+    const mask = maskedGradientLayer?.mask;
+    if (!mask?.graphics?.drawAsPath) return;
+    const maskCanvas = document.createElement('canvas');
+    const gradientCanvas = document.createElement('canvas');
+    maskCanvas.width = gradientCanvas.width = Math.ceil(canvasSize.width);
+    maskCanvas.height = gradientCanvas.height = Math.ceil(canvasSize.height);
+    const maskContext = maskCanvas.getContext('2d');
+    const gradientContext = gradientCanvas.getContext('2d');
+    if (!maskContext || !gradientContext) return;
+    // Rasterize the thousands of map-dot paths once. Each tween frame then
+    // composites a gradient against this reusable alpha mask.
+    const matrix = maskedGradientLayer.getMatrix().invert().appendMatrix(mask.getMatrix());
+    maskContext.setTransform(matrix.a, matrix.b, matrix.c, matrix.d, matrix.tx, matrix.ty);
+    mask.graphics.drawAsPath(maskContext);
+    maskContext.fill();
+    paintGradientBitmap = (centerX, centerY) => {
+      const radius = MAP_GRADIENT_BASE_RADIUS * MAP_GRADIENT_SCALE;
+      const gradient = gradientContext.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+      MAP_GRADIENT_COLORS.forEach((color, index) => gradient.addColorStop(MAP_GRADIENT_RATIOS[index], color));
+      gradientContext.clearRect(0, 0, gradientCanvas.width, gradientCanvas.height);
+      gradientContext.globalCompositeOperation = 'source-over';
+      gradientContext.fillStyle = gradient;
+      gradientContext.fillRect(0, 0, gradientCanvas.width, gradientCanvas.height);
+      gradientContext.globalCompositeOperation = 'destination-in';
+      gradientContext.drawImage(maskCanvas, 0, 0);
+      gradientContext.globalCompositeOperation = 'source-over';
+    };
+    paintGradientBitmap(gradientVisualCenter.x, gradientVisualCenter.y);
+    maskedGradientLayer.mask = null;
+    maskedGradientLayer.draw = (context) => {
+      context.drawImage(gradientCanvas, 0, 0);
+      return true;
+    };
+  };
+
   const applyGradientCenter = (centerX, centerY) => {
     if (!maskedGradientShape) {
+      return;
+    }
+    if (paintGradientBitmap) {
+      paintGradientBitmap(centerX, centerY);
       return;
     }
 
@@ -1388,18 +1431,19 @@ export async function initInteractiveMap() {
     // behind gradient/overlay/pin choreography. The intro cycle keeps its
     // chained pacing in the branch below.
     if (!suppressCard) {
-      animateGradientTo(gradientTarget);
+      const gradientDone = new Promise(resolve => animateGradientTo(gradientTarget, resolve));
+      let pinsDone = Promise.resolve();
       showPartnerOverlayWithFade(activeKey);
 
       if (pinController) {
         if (pinMode === 'intro') {
-          pinController.runIntroPartnerPop(activeKey, {
+          pinsDone = pinController.runIntroPartnerPop(activeKey, {
             holdMs: pinHoldMs ?? runtimePinAnimation.introHoldMs,
             durationMs: runtimePinAnimation.popDurationMs,
             staggerMs: runtimePinAnimation.popStaggerMs,
           });
         } else {
-          pinController.applyManualSelectionState(activeKey, {
+          pinsDone = pinController.applyManualSelectionState(activeKey, {
             holdMs: pinHoldMs ?? runtimePinAnimation.manualHoldMs,
             highlightHq: true,
             durationMs: runtimePinAnimation.popDurationMs,
@@ -1414,6 +1458,11 @@ export async function initInteractiveMap() {
 
       renderCard(partner);
       showCardWithFade();
+      Promise.all([gradientDone, Promise.resolve(pinsDone)]).then(() => {
+        if (interactionToken === activeInteractionToken && module.dataset.activeKey === String(activeKey)) {
+          pauseStageRendering();
+        }
+      });
 
       if (onTransitionComplete) {
         onTransitionComplete();
@@ -1665,65 +1714,7 @@ export async function initInteractiveMap() {
   });
 
   const applyViewportFitLayout = () => {
-    if (!mapHeader || !mapStage || !mapControls || !mapAnimationShell) {
-      return;
-    }
-
-    const viewportWidth = Math.max(1, Math.round(window.innerWidth || 1));
-    const viewportHeight = Math.max(1, Math.round(window.innerHeight || 1));
-    const isWideDesktop = viewportWidth >= 1140;
-
-    const topGap = isWideDesktop
-      ? Math.max(16, Math.min(36, Math.round(viewportHeight * 0.03)))
-      : Math.max(10, Math.min(22, Math.round(viewportHeight * 0.02)));
-    const bottomGap = isWideDesktop
-      ? Math.max(2, Math.min(10, Math.round(viewportHeight * 0.01)))
-      : Math.max(8, Math.min(16, Math.round(viewportHeight * 0.015)));
-    const controlsLift = isWideDesktop ? 14 : 0;
-
-    mapStage.style.marginTop = `${topGap}px`;
-    mapStage.style.marginBottom = `${bottomGap}px`;
-
-    if (!isWideDesktop) {
-      module.style.paddingTop = '';
-      module.style.paddingBottom = '';
-      mapControls.style.marginTop = '';
-      mapAnimationShell.style.width = '';
-      mapAnimationShell.style.height = '';
-      mapAnimationShell.style.maxWidth = '';
-      mapAnimationShell.style.aspectRatio = '';
-      return;
-    }
-
-    const sectionPadTop = Math.max(10, Math.min(20, Math.round(viewportHeight * 0.02)));
-    const sectionPadBottom = Math.max(6, Math.min(14, Math.round(viewportHeight * 0.012)));
-    module.style.paddingTop = `${sectionPadTop}px`;
-    module.style.paddingBottom = `${sectionPadBottom}px`;
-    mapControls.style.marginTop = `${-controlsLift}px`;
-
-    const ratioWidth = 1277;
-    const ratioHeight = 809;
-    const headerHeight = Math.round(mapHeader.getBoundingClientRect().height || 0);
-    const controlsHeight = Math.round(mapControls.getBoundingClientRect().height || 0);
-    const reservedHeight = isWideDesktop
-      ? sectionPadTop + sectionPadBottom + Math.max(0, controlsHeight - controlsLift) + topGap + bottomGap
-      : sectionPadTop + sectionPadBottom + headerHeight + controlsHeight + topGap + bottomGap;
-    const availableHeight = Math.max(320, viewportHeight - reservedHeight);
-
-    const inlineGutter = viewportWidth >= 1536 ? 56 : (viewportWidth >= 1280 ? 40 : 28);
-    const maxWidth = Math.max(520, viewportWidth - (inlineGutter * 2));
-
-    let targetHeight = availableHeight;
-    let targetWidth = Math.round((targetHeight * ratioWidth) / ratioHeight);
-    if (targetWidth > maxWidth) {
-      targetWidth = maxWidth;
-      targetHeight = Math.round((targetWidth * ratioHeight) / ratioWidth);
-    }
-
-    mapAnimationShell.style.width = `${targetWidth}px`;
-    mapAnimationShell.style.height = `${targetHeight}px`;
-    mapAnimationShell.style.maxWidth = '100%';
-    mapAnimationShell.style.aspectRatio = `${ratioWidth} / ${ratioHeight}`;
+    fitMapToViewport(module);
   };
 
   const bootstrapCanvas = async () => {
@@ -1753,6 +1744,7 @@ export async function initInteractiveMap() {
     }
     maskedGradientLayer = findGradientLayer(exportRoot);
     maskedGradientShape = maskedGradientLayer?.shape || null;
+    installGradientBitmap();
     companyDotsLayer = findCompanyDotsLayer(exportRoot);
     injectCmsOfficeDots(lib, companyDotsLayer);
     initializePinControllerFromLayer(companyDotsLayer);
@@ -1783,13 +1775,13 @@ export async function initInteractiveMap() {
       if (typeof IntersectionObserver !== 'undefined') {
         const visibilityObserver = new IntersectionObserver((entries) => {
           for (const entry of entries) {
-            stageIsVisible = entry.isIntersecting;
+            stageIsVisible = entry.isIntersecting && entry.intersectionRatio >= 0.02;
             syncStageTickSubscription();
             if (stageIsVisible) {
               renderStageOnce();
             }
           }
-        }, { threshold: 0 });
+        }, { threshold: [0, 0.02], rootMargin: '-112px 0px 0px 0px' });
         visibilityObserver.observe(canvas);
       }
     };
@@ -1855,7 +1847,6 @@ export async function initInteractiveMap() {
     });
   }
 
-  window.addEventListener('resize', applyViewportFitLayout, { passive: true });
 
   // Card placement and the mobile focus zoom are measured from live rects at
   // render/focus time, so they drift when the viewport changes. Refresh the
@@ -1886,6 +1877,7 @@ export async function initInteractiveMap() {
       }
     }, 150);
   }, { passive: true });
+  document.addEventListener('visibilitychange', syncStageTickSubscription);
 
   module.dataset.status = 'booting';
 
