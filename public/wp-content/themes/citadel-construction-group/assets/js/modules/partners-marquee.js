@@ -25,7 +25,9 @@ export function initPartnersMarquee() {
     return;
   }
 
-  list.replaceChildren(...shuffleItems([...originalItems]));
+  if (module.dataset.marqueePreserveOrder !== '1') {
+    list.replaceChildren(...shuffleItems([...originalItems]));
+  }
   const reducedMotionMode = module.dataset.marqueeReducedMotionMode === 'slow' ? 'slow' : 'static';
   const inViewOnly = module.dataset.marqueeInViewOnly !== '0';
   const speed = Number(module.dataset.marqueeSpeed || '30');

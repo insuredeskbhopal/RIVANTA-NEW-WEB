@@ -1,0 +1,223 @@
+{
+  "legalName": "Rivanta Green Innovative Venture Private Limited",
+  "coreOrder": [
+    "Silicon / Bio-Silica",
+    "Sustainable Aviation Fuel",
+    "Compressed Biogas"
+  ],
+  "cards": [
+    {
+      "title": "Silicon / Bio-Silica",
+      "theme": 0,
+      "file": "bio-silica-lab.jpg",
+      "meta": "Proposed \u00b7 Materials",
+      "url": "https://www.rivantagreen.com/bio-silica",
+      "summary": "Silica-rich residues such as rice husk can support biogenic silica development. Rivanta is targeting 6N (99.9999%) purity as an intended specification, not an achieved or certified result. Potential applications include rubber reinforcement, coatings and other industrial materials. Elemental silicon requires a separate conversion and purification route.",
+      "detail": [
+        "Silica-rich agricultural residues, particularly rice husk, offer a potential route to biogenic silica when feedstock quality, thermal treatment and chemical processing are appropriately controlled. Industrial uses can include reinforcement in rubber, paints and coatings, and other specification-led applications.",
+        "Rivanta\u2019s intended high-purity target is 6N (99.9999%). It is a development objective, not an achieved or certified specification. Process validation, repeatable analytical testing and customer qualification are necessary before any product grade can be claimed.",
+        "Silica is silicon dioxide, not elemental silicon. Downstream silicon would require separate reduction and additional purification; producing silica does not automatically produce semiconductor-grade silicon. India\u2019s imported silica and silicon markets provide context for domestic value addition, but grade-specific demand and commercial feasibility must guide development."
+      ]
+    },
+    {
+      "title": "Sustainable Aviation Fuel",
+      "theme": 1,
+      "file": "gallery/05-future-fuels.jpg",
+      "meta": "Proposed \u00b7 Fuels",
+      "url": "https://www.rivantagreen.com/saf",
+      "summary": "Aviation needs fuel alternatives with demonstrable lifecycle benefits. Suitable biomass-derived intermediates may support SAF through qualified conversion and refining pathways. Rivanta\u2019s SAF work remains at feasibility stage; pathway selection, fuel specifications, feedstock sustainability and lifecycle assessment must all be addressed before certified supply can be claimed.",
+      "detail": [
+        "Sustainable Aviation Fuel is aviation fuel made through qualified alternative pathways with sustainability and lifecycle performance assessed separately from fuel quality. It can support aviation energy diversification, but benefits depend on feedstock sourcing, process energy and the complete supply chain.",
+        "Suitable biomass-derived intermediates may enter routes such as alcohol-to-jet or gasification followed by synthesis. Each requires technology-specific processing, appropriate upgrading, blending where required and testing against applicable aviation-fuel specifications. Biomass conversion alone does not produce certified jet fuel.",
+        "Rivanta describes this vertical as being at feasibility stage. It is evaluating an opportunity, not supplying certified SAF today. India\u2019s indicative SAF blending ambitions create a policy context; they are not evidence of a Rivanta approval, airline agreement or guaranteed market."
+      ]
+    },
+    {
+      "title": "Compressed Biogas",
+      "theme": 2,
+      "file": "cbg-plant.jpg",
+      "meta": "Proposed \u00b7 Renewable Gas",
+      "url": "https://www.rivantagreen.com/cbg",
+      "summary": "Suitable organic feedstocks can be digested to produce biogas, then cleaned, upgraded and compressed into CBG. Preparation must match the material: fibrous straw cannot be treated like wet organic residues. Rivanta\u2019s proposed pathway considers gas quality, safe operation and responsible management of digestate alongside potential transport and industrial uses.",
+      "detail": [
+        "Anaerobic digestion can convert suitable organic material into biogas. Gas cleaning and upgrading remove carbon dioxide, moisture and other contaminants; the resulting biomethane is then compressed and tested for its intended application. Potential uses include transport, industrial energy and other compatible gas systems.",
+        "Feedstock composition matters. Moisture, biodegradability and contaminants influence preparation and digestion. Lignocellulosic residues may require pretreatment or suitable blending, rather than being interchangeable with wet organic materials.",
+        "Rivanta\u2019s CBG vertical remains in engineering and planning. Development requires process selection, reliable feedstock, applicable Indian gas-quality requirements and safe storage and handling. Digestate may offer nutrient-recovery opportunities only after appropriate characterisation, treatment and compliance checks; it is not automatically a marketable fertiliser."
+      ]
+    },
+    {
+      "title": "Biomass Sourcing & Logistics",
+      "theme": 3,
+      "file": "feedstock-aggregation.jpg",
+      "meta": "Proposed \u00b7 Feedstock",
+      "url": "https://www.rivantagreen.com/feedstock",
+      "summary": "Agricultural residues are a seasonal resource, not an interchangeable commodity. Rice straw and husk, wheat residues and suitable sugarcane streams differ in moisture, ash and handling needs. Rivanta proposes organised collection, segregation, storage and quality assessment to connect appropriate feedstocks with the right industrial pathway.",
+      "detail": [
+        "India\u2019s agricultural residues have economic potential, but sustainably available surplus must be assessed locally. Rice straw, rice husk, wheat straw and suitable sugarcane residues have different characteristics, existing uses and collection requirements. Residue removal must also consider soil needs and competing rural uses.",
+        "Short sowing windows can make burning a quick field-clearing option. Collection machinery, transport costs, storage risks and limited nearby demand can constrain alternatives. Burning contributes to seasonal air pollution in North India, including Delhi-NCR, alongside other pollution sources.",
+        "Rivanta proposes organised sourcing and aggregation with feedstock-specific quality checks, moisture control, safe storage and practical logistics. Procurement would require clear commercial terms and dependable local partnerships, rather than promises of guaranteed farmer income or unlimited feedstock availability."
+      ]
+    },
+    {
+      "title": "Integrated Infrastructure",
+      "theme": 4,
+      "file": "hero-facility.png",
+      "meta": "Concept \u00b7 Proposed Campus",
+      "url": "https://www.rivantagreen.com/projects",
+      "summary": "A proposed industrial ecosystem needs dependable infrastructure as well as conversion technology. Rivanta\u2019s planning considers shared logistics, appropriate biomass-based energy, solar and wind integration, utilities and resource management. Connections between facilities must be justified through engineering and feasibility work, rather than assumed from the concept image.",
+      "detail": [
+        "Rivanta\u2019s proposed model brings biomass sourcing, technology-specific conversion and shared infrastructure into one development vision. The published master-campus image is retained as a concept illustration; it is not evidence of completed or operational facilities.",
+        "Planning considers appropriate biomass streams for controlled energy generation, alongside potential solar and wind integration. Resource availability, engineering, grid arrangements and operational requirements would determine which energy options are practical. Shared steam, power, water, storage and transport systems require their own technical assessment.",
+        "Product pathways remain distinct. No unverified transfer of material or energy between units is implied. Technology selection, balances of materials and energy, infrastructure design and applicable approvals must establish which interfaces are feasible before construction and operation."
+      ]
+    },
+    {
+      "title": "Quality & Water Management",
+      "theme": 6,
+      "file": "saf-laboratory-testing.jpg",
+      "meta": "Proposed \u00b7 Design Objectives",
+      "url": "https://www.rivantagreen.com/sustainability",
+      "summary": "Credible industrial development depends on evidence: feedstock testing, product characterisation, fuel quality and environmental controls. Rivanta\u2019s proposed water strategy includes reuse and a Zero Liquid Discharge design objective. These plans require engineering validation, residual management and applicable approvals; they are not claims of achieved compliance.",
+      "detail": [
+        "Feedstock variability and customer requirements make testing central to each proposed pathway. Material characterisation, purity measurement and application-specific qualification are needed for silica and any downstream silicon development. Fuel-quality testing and sustainability assessment are separate requirements for SAF, while CBG must meet the quality requirements of its intended use.",
+        "Rivanta proposes water efficiency, process-water reuse and a Zero Liquid Discharge approach as design objectives. A workable system depends on water balance, treatment selection, recovery performance and management of salts, sludge and other residuals.",
+        "ZLD does not mean zero air emissions, zero solid residues or automatic environmental compliance. Pollution-control systems, monitoring, safe handling and the applicable consent and approval processes remain necessary parts of responsible project development."
+      ]
+    },
+    {
+      "title": "Circular Outputs & Soil Value",
+      "theme": 5,
+      "file": "cbg-organic-manure-processing.jpg",
+      "meta": "Proposed \u00b7 Resource Recovery",
+      "url": "https://www.rivantagreen.com/sustainability",
+      "summary": "Useful by-products deserve the same care as primary products. Suitable streams may support biochar, nutrient recovery or agricultural reuse, subject to process selection, testing and applicable requirements. Rivanta aims to improve resource efficiency without claiming that every residue can become a saleable product or that industrial conversion is automatically zero-waste.",
+      "detail": [
+        "A circular industrial approach seeks beneficial uses for suitable by-products while keeping environmental and product-quality safeguards in place. Potential outputs depend on the selected feedstock and conversion process; they cannot be assumed to be identical across the proposed facilities.",
+        "Biochar may be relevant to appropriate controlled thermochemical pathways. Digestate from digestion may support nutrient recovery or agricultural use after characterisation and treatment. Ash and other mineral streams require their own assessment before reuse. Safety, agronomic suitability and applicable product requirements determine what can be beneficially used.",
+        "Rivanta\u2019s objective is to maximise useful outputs and minimise avoidable impacts. This remains a development aim, not a claim of zero emissions or zero waste. Residual streams without a suitable beneficial use must still be managed responsibly."
+      ]
+    },
+    {
+      "title": "Farmers & Local Value Chains",
+      "theme": 3,
+      "file": "feedstock-rural-aggregation.jpg",
+      "meta": "Proposed \u00b7 Shared Opportunity",
+      "url": "https://www.rivantagreen.com/feedstock",
+      "summary": "A viable biomass industry depends on people as much as equipment. Organised residue markets can create opportunities for farmers, aggregators, transport providers and local enterprises. Rivanta\u2019s proposed development may also support technical roles and skills training, with outcomes dependent on project progress, procurement needs and responsible commercial arrangements.",
+      "detail": [
+        "Organised residue collection can create an additional market option for farmers and a service opportunity for rural entrepreneurs. Baling, aggregation, transport, storage and quality assessment are practical capabilities that help link seasonal agricultural supply with industrial demand.",
+        "Participation must be based on clear procurement terms, local conditions and responsible sourcing. Residues already used for fodder, soil cover or other local needs should not be treated as freely available waste. No fixed income, employment or environmental outcome can be guaranteed from a proposed project.",
+        "Development may create direct and indirect work in operations, logistics, engineering and supporting services. Skills training, safe working practices and community dialogue are part of the intended approach. Specific employment totals are withheld until supported by approved project records."
+      ]
+    }
+  ],
+  "people": [
+    [
+      "Farmer Networks",
+      "Responsible residue sourcing",
+      "Potential procurement participation",
+      "feedstock-rural-aggregation.jpg",
+      "gallery/01-raw-materials.jpg",
+      "https://www.rivantagreen.com/feedstock"
+    ],
+    [
+      "Rural Enterprise",
+      "Collection and transport",
+      "Local service opportunities",
+      "feedstock-aggregation.jpg",
+      "feedstock-rural-aggregation.jpg",
+      "https://www.rivantagreen.com/feedstock"
+    ],
+    [
+      "Skilled Teams",
+      "Training and safe operations",
+      "Skills for proposed facilities",
+      "projects-engineering-civil.jpg",
+      "company-innovation.jpg",
+      "https://www.rivantagreen.com/projects"
+    ],
+    [
+      "Quality Teams",
+      "Materials and fuel testing",
+      "Specification-led development",
+      "bio-silica-lab.jpg",
+      "saf-laboratory-testing.jpg",
+      "https://www.rivantagreen.com/bio-silica"
+    ],
+    [
+      "Safe Engineering",
+      "Design and risk management",
+      "Responsible project delivery",
+      "projects-engineering-civil.jpg",
+      "company-innovation.jpg",
+      "https://www.rivantagreen.com/projects"
+    ],
+    [
+      "Local Suppliers",
+      "Services and logistics",
+      "Supply-chain participation",
+      "feedstock-aggregation.jpg",
+      "feedstock-rural-aggregation.jpg",
+      "https://www.rivantagreen.com/contact"
+    ],
+    [
+      "Local Communities",
+      "Dialogue and resource care",
+      "Long-term stakeholder engagement",
+      "gallery/06-circular-products.jpg",
+      "vision-ecological-industry.jpg",
+      "https://www.rivantagreen.com/sustainability"
+    ]
+  ],
+  "directory": [
+    [
+      "Silicon / Bio-Silica",
+      "Materials partnerships",
+      0,
+      "mailto:info@rivantagreen.com?subject=Silicon%20and%20Bio-Silica%20Enquiry",
+      "Discuss Materials"
+    ],
+    [
+      "Sustainable Aviation Fuel",
+      "Qualified fuel pathways",
+      1,
+      "mailto:info@rivantagreen.com?subject=SAF%20Enquiry",
+      "Discuss SAF"
+    ],
+    [
+      "Compressed Biogas",
+      "Renewable gas development",
+      2,
+      "mailto:info@rivantagreen.com?subject=CBG%20Enquiry",
+      "Discuss CBG"
+    ],
+    [
+      "Biomass Supply",
+      "Farmers & aggregators",
+      3,
+      "mailto:info@rivantagreen.com?subject=Biomass%20Supply%20Enquiry",
+      "Discuss Supply"
+    ],
+    [
+      "Engineering & Research",
+      "Technology evaluation",
+      6,
+      "mailto:info@rivantagreen.com?subject=Engineering%20and%20Research%20Enquiry",
+      "Explore Collaboration"
+    ],
+    [
+      "Corporate Office",
+      "Bhopal, Madhya Pradesh",
+      4,
+      "https://www.rivantagreen.com/contact",
+      "Contact Rivanta"
+    ],
+    [
+      "General Enquiries",
+      "+91 98930 25375",
+      5,
+      "tel:+919893025375",
+      "Call Rivanta"
+    ]
+  ]
+}

@@ -11,7 +11,7 @@ export function initHeroCanvasSequence() {
   const closingVideo=hero.querySelector('.citadel-hero-video-secondary');
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
   const metricNodes=['projects','project-value','employees-k'].map(name=>hero.querySelector(`[data-metric="${name}"]`));
-  const metricTargets=[Number(hero.dataset.heroMetricTotalProjects)||21,Number(hero.dataset.heroMetricTotalProjectValueBn)||10,Number(hero.dataset.heroMetricCombinedEmployeesK)||2.4];
+  const metricTargets=[Number(hero.dataset.heroMetricTotalProjects)||3,Number(hero.dataset.heroMetricTotalProjectValueBn)||6,Number(hero.dataset.heroMetricCombinedEmployeesK)||1];
   const clamp=value=>Math.max(0,Math.min(1,value));
   const smoothstep=(start,end,value)=>{const t=clamp((value-start)/(end-start));return t*t*(3-2*t);};
   let width=1,height=1,top=0,range=1,pixelRatio=1;

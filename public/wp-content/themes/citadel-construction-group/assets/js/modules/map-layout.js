@@ -5,6 +5,12 @@ export function fitMapToViewport(module=document.querySelector('[data-module="in
   const controls=module.querySelector('[data-map-controls]');
   const shell=module.querySelector('[data-map-animation]');
   if(!stage || !controls || !shell) return;
+  if(module.dataset.mapLayout==='split') {
+    stage.style.marginTop='';stage.style.marginBottom='';
+    module.style.paddingTop='';module.style.paddingBottom='';controls.style.marginTop='';
+    shell.style.width='';shell.style.height='';shell.style.maxWidth='';shell.style.aspectRatio='';
+    return;
+  }
   const width=innerWidth,height=innerHeight,wide=width>=1140;
   const topGap=wide ? Math.max(16,Math.min(36,Math.round(height*0.03))) : Math.max(10,Math.min(22,Math.round(height*0.02)));
   const bottomGap=wide ? Math.max(2,Math.min(10,Math.round(height*0.01))) : Math.max(8,Math.min(16,Math.round(height*0.015)));

@@ -1,0 +1,344 @@
+[
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/about-industrial-plant-ground.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/about"
+    ],
+    "altTexts": [
+      "Rivanta Green Sustainable Bio-Refinery Campus"
+    ],
+    "relativePath": "about-industrial-plant-ground.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\about-industrial-plant-ground.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 955929,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "f5012d78bd65535ef0465b9c46a2beb19e642d35c8e101bad7bce3f9aa6a2c62",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/bio-silica-lab.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/bio-silica"
+    ],
+    "altTexts": [
+      "Rivanta Green Industrial Infrastructure Concept"
+    ],
+    "relativePath": "bio-silica-lab.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\bio-silica-lab.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 864043,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "333d535a8aead6a58617ffb656ce40b454d4b97d55678936d3e14e5abaf4d3e6",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/cbg-organic-manure-processing.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/cbg"
+    ],
+    "altTexts": [
+      "Fermented Organic Manure and Circular Digestate Processing"
+    ],
+    "relativePath": "cbg-organic-manure-processing.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\cbg-organic-manure-processing.jpg",
+    "width": 1200,
+    "height": 896,
+    "aspectRatio": 1.33929,
+    "bytes": 932472,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "9cd22fedcc46a1aa53022e1dc142b37d4d62207efa72b316a61a35894eb9f2d5",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/cbg-plant.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/cbg"
+    ],
+    "altTexts": [
+      "Rivanta Green Industrial Infrastructure Concept"
+    ],
+    "relativePath": "cbg-plant.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\cbg-plant.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 1009828,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "4df20d7e0583554be7c8747a8e9117d828f6c39169f81506e67ff8bc9456e6ff",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/company-innovation.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/about",
+      "https://www.rivantagreen.com/vision"
+    ],
+    "altTexts": [
+      "Rivanta Green Industrial Infrastructure Concept",
+      "Rivanta Industrial Engineering Development"
+    ],
+    "relativePath": "company-innovation.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\company-innovation.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 1028575,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "f38f83b6133611856028cb28c893a3fbc52e1b02381a81b506b36e94a5a3157c",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/feedstock-aggregation.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/feedstock"
+    ],
+    "altTexts": [
+      "Rivanta Green Industrial Infrastructure Concept"
+    ],
+    "relativePath": "feedstock-aggregation.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\feedstock-aggregation.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 966606,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "edc70f821e5f57040f36740e0f0e931fc58b23c2a0f463aa3029bfcc87c13910",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/feedstock-rural-aggregation.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/feedstock"
+    ],
+    "altTexts": [
+      "Rural Biomass Collection and Aggregation Depot"
+    ],
+    "relativePath": "feedstock-rural-aggregation.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\feedstock-rural-aggregation.jpg",
+    "width": 1200,
+    "height": 896,
+    "aspectRatio": 1.33929,
+    "bytes": 1063046,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "a082d1778dea4c96fd79cf59e8f6c994ef3eb4fc82c425069703d71f2bfecae2",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/gallery/01-raw-materials.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/"
+    ],
+    "altTexts": [
+      "Sustained by agricultural resources.",
+      "Agricultural resources"
+    ],
+    "relativePath": "gallery/01-raw-materials.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\gallery\\01-raw-materials.jpg",
+    "width": 1800,
+    "height": 1200,
+    "aspectRatio": 1.5,
+    "bytes": 194876,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "11fd2bd944912e3442e1ba76e5ed0d9b159a577a68f156ffaa3d6f5c44120e09",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/gallery/03-energy-integration.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/"
+    ],
+    "altTexts": [
+      "Energy efficiency"
+    ],
+    "relativePath": "gallery/03-energy-integration.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\gallery\\03-energy-integration.jpg",
+    "width": 1800,
+    "height": 1200,
+    "aspectRatio": 1.5,
+    "bytes": 211762,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "3db96aa21dc1edc6e1eaa6d1d420d45b441c7df4f1e6ec920d0b9c178d3939e5",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/gallery/05-future-fuels.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/"
+    ],
+    "altTexts": [
+      "Sustainable aviation"
+    ],
+    "relativePath": "gallery/05-future-fuels.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\gallery\\05-future-fuels.jpg",
+    "width": 1800,
+    "height": 1196,
+    "aspectRatio": 1.50502,
+    "bytes": 220002,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "26def4fdb092842c8312c9eb27ac6b49f1a6eea7c1aba53c5276546a6a8f8b1b",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/gallery/06-circular-products.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/"
+    ],
+    "altTexts": [
+      "Resource recovery"
+    ],
+    "relativePath": "gallery/06-circular-products.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\gallery\\06-circular-products.jpg",
+    "width": 1800,
+    "height": 1200,
+    "aspectRatio": 1.5,
+    "bytes": 207693,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "cb392693c1c397ab08d7de31ecf9544f0097dd5e82d15c30228b9333e25419ac",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/hero-facility.png",
+    "sourcePages": [
+      "https://www.rivantagreen.com/",
+      "https://www.rivantagreen.com/projects",
+      "https://www.rivantagreen.com/sustainability"
+    ],
+    "altTexts": [
+      "Rivanta Green Industrial Development Facility Concept",
+      "Rivanta Green Industrial Infrastructure Concept"
+    ],
+    "relativePath": "hero-facility.png",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\hero-facility.png",
+    "width": 1692,
+    "height": 930,
+    "aspectRatio": 1.81935,
+    "bytes": 3020159,
+    "format": "PNG",
+    "mode": "RGBA",
+    "sha256": "67184aac9dcd793c79cdbbf65ce03f116d768f2c9cdce8769c0b5de4f2cc76e5",
+    "contentType": "image/png",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/projects-engineering-civil.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/projects"
+    ],
+    "altTexts": [
+      "Civil Engineering and Site Development at Greenfield Facility"
+    ],
+    "relativePath": "projects-engineering-civil.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\projects-engineering-civil.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 1076080,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "d5fac625f81ce6935ce53198c8960ea244a4c0a9782ad23e919cb6458419a8ab",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/saf-laboratory-testing.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/saf"
+    ],
+    "altTexts": [
+      "Aviation Bio-Fuel Laboratory Testing and Characterization"
+    ],
+    "relativePath": "saf-laboratory-testing.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\saf-laboratory-testing.jpg",
+    "width": 1200,
+    "height": 896,
+    "aspectRatio": 1.33929,
+    "bytes": 791919,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "75c34d7f9eb6750675cb9863bb2b5910cde557e463f4d504c8b19bcbb9cb67f9",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/saf-refining-hydrotreater.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/saf"
+    ],
+    "altTexts": [
+      "Sustainable Aviation Fuel Catalytic Hydrotreating Refinery"
+    ],
+    "relativePath": "saf-refining-hydrotreater.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\saf-refining-hydrotreater.jpg",
+    "width": 1200,
+    "height": 896,
+    "aspectRatio": 1.33929,
+    "bytes": 1000706,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "91a7d678d0a8fd9837204b83453e3171e7ac488b48fd4b092e98aa3683f884e2",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  },
+  {
+    "sourceURL": "https://www.rivantagreen.com/images/vision-ecological-industry.jpg",
+    "sourcePages": [
+      "https://www.rivantagreen.com/vision"
+    ],
+    "altTexts": [
+      "Industrial Progress Harmonized with Rural Agriculture"
+    ],
+    "relativePath": "vision-ecological-industry.jpg",
+    "localPath": "C:\\Users\\abhis\\AppData\\Local\\Temp\\rivanta-company-images\\vision-ecological-industry.jpg",
+    "width": 1376,
+    "height": 768,
+    "aspectRatio": 1.79167,
+    "bytes": 824788,
+    "format": "JPEG",
+    "mode": "RGB",
+    "sha256": "4fc49837148c1dddb3d0f5cbe336843b40bf757fd222c521ade4c7701674f62a",
+    "contentType": "image/jpeg",
+    "httpStatus": 200,
+    "bytePreserved": true
+  }
+]

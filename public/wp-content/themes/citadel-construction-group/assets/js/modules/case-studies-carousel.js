@@ -281,8 +281,11 @@ export function initCaseStudiesCarousel() {
         return;
       }
 
-      trigger.dataset.caseStudyExpandable = isCut ? '1' : '0';
-      if (isCut) {
+      // The refined cards show a concise summary and keep the fuller pathway
+      // explanation in the existing dialog, even when the summary fits.
+      const expandable = isCut || trigger.dataset.caseStudyDetailMode === 'summary';
+      trigger.dataset.caseStudyExpandable = expandable ? '1' : '0';
+      if (expandable) {
         trigger.setAttribute('role', 'button');
         trigger.tabIndex = 0;
       } else {

@@ -1,3 +1,4 @@
+import { INDIA_MAP_DOTS } from './india-map-dots.js';
 import { createExperiment3IntroController } from './interactive-map-experiment-3-intro.js';
 import { createInteractiveMapPinController } from './interactive-map-pin-controller.js';
 import { fitMapToViewport } from './map-layout.js';
@@ -403,6 +404,15 @@ export async function initInteractiveMap() {
   };
 
   const focusMobileOnPartner = (partnerKey, onComplete) => {
+    if (module.dataset.mapVisual === 'india') {
+      // Keep the complete India outline visible; the old focus bounds describe
+      // the previous regional artwork, rather than geographic product locations.
+      module.classList.remove('is-mobile-focused');
+      mobileFocusActive = false;
+      animationContainer.style.transform = 'none';
+      if (typeof onComplete === 'function') onComplete();
+      return;
+    }
     const unionBounds = getOverlayUnionBounds(partnerKey);
     if (!unionBounds) {
       module.classList.remove('is-mobile-focused');
@@ -876,9 +886,9 @@ export async function initInteractiveMap() {
     const primaryLocation = getPrimaryLocation(partner.locations);
     const point = getPartnerPoint(partner, pointMap);
     const partnerKey = partner.partner_key || partner.name || partner.short_name;
-    const locationLabel = partner.hq_location || (primaryLocation
+    const locationLabel = partner.summary || partner.hq_location || (primaryLocation
       ? `${primaryLocation.city || ''}${primaryLocation.state ? `, ${primaryLocation.state}` : ''}`
-      : 'Location details coming soon');
+      : 'Pathway details');
 
     // Below the mobile breakpoint the card sits on a dark background: serve
     // the partner's white-on-transparent (marquee) logo there and the on-white
@@ -893,8 +903,12 @@ export async function initInteractiveMap() {
       ? `<span class="citadel-map-card-logo-slot"><picture>${cardLogoSourceHtml}<img src="${escapeHtml(partner.logo_url)}" alt="${escapeHtml(partner.name || 'Partner')}" loading="lazy"${cardLogoClass}></picture></span>`
       : '';
     const websiteHtml = partner.website_url
-      ? `<a class="citadel-map-visit" href="${escapeHtml(partner.website_url)}" target="_blank" rel="noopener noreferrer">Visit Partner</a>`
+      ? `<a class="citadel-map-visit" href="${escapeHtml(partner.website_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(partner.cta_label || 'Explore Pathway')}</a>`
       : '';
+
+    const selectedControl = Array.from(controlsRoot.querySelectorAll('button[data-partner-key]'))
+      .find((button) => normalizeKey(button.dataset.partnerKey) === normalizeKey(partnerKey));
+    cardRoot.dataset.selectionGroup = selectedControl?.closest('.rivanta-product-tabs') ? 'product' : 'support';
 
     cardRoot.innerHTML = `
       <div class="citadel-map-card-inner">
@@ -933,6 +947,19 @@ export async function initInteractiveMap() {
   const gradientTweenState = { x: gradientVisualCenter.x, y: gradientVisualCenter.y };
 
   let paintGradientBitmap = null;
+  // Keep the existing gradient and selection transitions, using India as the artwork.
+  const installIndiaMapMask = () => {
+    if (module.dataset.mapVisual !== 'india' || !maskedGradientLayer || !window.createjs?.Shape) return;
+    const mask = new window.createjs.Shape();
+    const graphics = mask.graphics.beginFill('#ffffff');
+    INDIA_MAP_DOTS.forEach(([x, y]) => {
+      graphics.moveTo(x + 3, y).drawCircle(x, y, 3);
+    });
+    graphics.endFill();
+    mask._off = true;
+    maskedGradientLayer.mask = mask;
+  };
+
   const installGradientBitmap = () => {
     const mask = maskedGradientLayer?.mask;
     if (!mask?.graphics?.drawAsPath) return;
@@ -1295,6 +1322,7 @@ export async function initInteractiveMap() {
       introController?.cancelCycle();
 
       if (module.dataset.activeKey === key) {
+        if (module.dataset.mapLayout === 'split') return;
         dismissSelection();
         return;
       }
@@ -1744,10 +1772,17 @@ export async function initInteractiveMap() {
     }
     maskedGradientLayer = findGradientLayer(exportRoot);
     maskedGradientShape = maskedGradientLayer?.shape || null;
+    installIndiaMapMask();
     installGradientBitmap();
     companyDotsLayer = findCompanyDotsLayer(exportRoot);
     injectCmsOfficeDots(lib, companyDotsLayer);
     initializePinControllerFromLayer(companyDotsLayer);
+    if (module.dataset.mapVisual === 'india') {
+      // These controls describe product pathways, not geographic facility locations.
+      // Hide the old network markers while retaining the control buttons and cards.
+      if (companyDotsLayer) companyDotsLayer.visible = false;
+      hitpointsRoot.style.display = 'none';
+    }
     if (maskedGradientLayer) {
       maskedGradientLayer.alpha = runtimeGradientBaseAlpha;
     }
@@ -1808,6 +1843,7 @@ export async function initInteractiveMap() {
   renderControls();
 
   const dismissOnOutsideClick = (event) => {
+    if (module.dataset.mapLayout === 'split') return;
     if (cardRoot.hidden || !cardRoot.classList.contains('is-visible')) {
       return;
     }
@@ -1832,8 +1868,13 @@ export async function initInteractiveMap() {
   }
 
   applyViewportFitLayout();
-  introController.primeMapIntro();
-  introController.armMapIntroOnViewportEntry();
+  if (module.dataset.mapLayout === 'split') {
+    module.dataset.loaded = 'true';
+    module.dataset.introState = 'resting';
+  } else {
+    introController.primeMapIntro();
+    introController.armMapIntroOnViewportEntry();
+  }
 
   if (typeof mobileMediaQuery.addEventListener === 'function') {
     mobileMediaQuery.addEventListener('change', (event) => {
@@ -1889,6 +1930,7 @@ export async function initInteractiveMap() {
     cardRoot.classList.remove('is-visible');
     cardRoot.hidden = true;
     module.dataset.status = 'ready';
+    if (module.dataset.mapLayout === 'split') setActive(partnerList[0].partner_key);
   } catch (error) {
     module.dataset.status = 'error';
     // eslint-disable-next-line no-console

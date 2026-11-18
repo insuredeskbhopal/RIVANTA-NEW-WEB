@@ -531,11 +531,11 @@ export function initScrollspyNav() {
     }
 
     prevArrow.hidden = false;
-    prevArrow.setAttribute('aria-label', index === 0 ? 'Go to Hero' : `Go to ${MOBILE_NAV_SECTIONS[index - 1].replace('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())}`);
+    prevArrow.setAttribute('aria-label', index === 0 ? 'Go to Hero' : `Go to ${navLinks.find((link) => link.hash === '#' + MOBILE_NAV_SECTIONS[index - 1])?.textContent.trim() || 'previous section'}`);
 
     if (index < MOBILE_NAV_SECTIONS.length - 1) {
       nextArrow.hidden = false;
-      nextArrow.setAttribute('aria-label', `Go to ${MOBILE_NAV_SECTIONS[index + 1].replace('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())}`);
+      nextArrow.setAttribute('aria-label', `Go to ${navLinks.find((link) => link.hash === '#' + MOBILE_NAV_SECTIONS[index + 1])?.textContent.trim() || 'next section'}`);
     } else {
       nextArrow.hidden = true;
     }

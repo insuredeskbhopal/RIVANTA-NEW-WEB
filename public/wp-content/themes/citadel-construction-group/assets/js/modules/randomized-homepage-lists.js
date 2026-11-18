@@ -34,7 +34,9 @@ export function initRandomizedHomepageLists() {
       return;
     }
 
-    list.replaceChildren(...shuffleItems(items));
+    // Product verticals have an editorial order; retain the existing layout
+    // initialization without shuffling those explicitly ordered lists.
+    if (!list.hasAttribute('data-preserve-order')) list.replaceChildren(...shuffleItems(items));
     applyFooterPartnerDesktopRows(list);
   });
 }
